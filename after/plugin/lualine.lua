@@ -9,7 +9,7 @@ local current_git_repo = nil
 
 local function repository_name()
   -- this might not be a git repository
-  if current_git_repo  then
+  if current_git_repo then
     return current_git_repo
   end
 
@@ -58,7 +58,11 @@ require('lualine').setup {
       --   end,
       -- },
     },
-    lualine_x = { 'encoding', 'fileformat', 'filetype' },
+    lualine_x = { {
+      require("noice").api.statusline.mode.get,
+      cond = require("noice").api.statusline.mode.has,
+      color = { fg = "#ff9e64" },
+    }, 'encoding', 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
     lualine_z = { 'location' }
   },
