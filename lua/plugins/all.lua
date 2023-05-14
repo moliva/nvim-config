@@ -20,12 +20,6 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons", 'RRethy/nvim-base16' }
   },
 
-  -- tabs
-  {
-    'romgrk/barbar.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' }
-  },
-
   -- issue here!
   -- {
   --   'nvim-tree/nvim-tree.lua',
@@ -43,6 +37,8 @@ return {
   },
   {
     'nvim-treesitter/playground',
+    -- TODO - set command as trigger - moliva - 2023/05/14
+    lazy = true
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
@@ -50,15 +46,13 @@ return {
 
   {
     'simrat39/symbols-outline.nvim',
+    lazy = true
   },
 
 
   -- git utils
   {
     'mbbill/undotree',
-  },
-  {
-    'tpope/vim-fugitive',
   },
   {
     'f-person/git-blame.nvim',
@@ -70,9 +64,9 @@ return {
     branch = 'v2.x',
     dependencies = {
       -- LSP Support
-      { 'neovim/nvim-lspconfig',             lazy = false },
-      { 'williamboman/mason.nvim',           lazy = false },
-      { 'williamboman/mason-lspconfig.nvim', lazy = false },
+      { 'neovim/nvim-lspconfig', },
+      { 'williamboman/mason.nvim', },
+      { 'williamboman/mason-lspconfig.nvim', },
 
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' }, { 'hrsh7th/cmp-buffer' }, { 'hrsh7th/cmp-path' }, { 'saadparwaiz1/cmp_luasnip' },
@@ -82,28 +76,23 @@ return {
   },
   {
     "onsails/lspkind.nvim",
+    lazy = true,
   },
-  {
-    'moliva/inlay-hints.nvim',
-    branch = 'feat/disable-tsserver-adapter',
-  },
-  -- use('simrat39/inlay-hints.nvim')
 
   -- lua
   {
     "ckipp01/stylua-nvim",
     build = "cargo install stylua",
+    lazy = true,
   },
   {
     "folke/neodev.nvim",
+    lazy = true,
   },
 
   -- edit
   {
     'tpope/vim-surround',
-  },
-  {
-    'numToStr/Comment.nvim',
   },
   {
     'windwp/nvim-autopairs',
@@ -114,54 +103,39 @@ return {
   {
     "AckslD/nvim-neoclip.lua",
   },
-  {
-    'ethanholz/nvim-lastplace',
-  },
-
   -- use('tpope/vim-repeat')
-  {
-    'ggandor/leap.nvim',
-  },
 
   -- debugging
-  { 'mfussenegger/nvim-dap' },
-  { 'rcarriga/nvim-dap-ui' },
-  { 'theHamsta/nvim-dap-virtual-text' },
+  {
+    'mfussenegger/nvim-dap',
+    lazy = true,
+  },
+  {
+    'rcarriga/nvim-dap-ui',
+    lazy = true,
+  },
+  {
+    'theHamsta/nvim-dap-virtual-text',
+    lazy = true,
+  },
 
   -- context menu keybindings
   {
     "folke/which-key.nvim",
-  },
-
-  -- todos and diagnostics
-  {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" }
-  },
-  {
-    "folke/trouble.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" }
+    lazy = true,
   },
 
   -- rust tools
-  {
-    'saecki/crates.nvim',
-    version = 'v0.3.0',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-  },
   -- use 'simrat39/rust-tools.nvim'
 
-  { 'gbrlsnchs/telescope-lsp-handlers.nvim' },
+  {
+    'gbrlsnchs/telescope-lsp-handlers.nvim',
+    -- TODO - review this - moliva - 2023/05/14
+    lazy = true,
+  },
 
   -- typescript
   -- use 'jose-elias-alvarez/typescript.nvim'
-
-  -- postman/curl like tool
-  {
-    "rest-nvim/rest.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" }
-  },
-
 
   -- better notifications
   {
