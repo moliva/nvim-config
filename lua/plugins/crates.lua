@@ -1,8 +1,6 @@
 return {
   'saecki/crates.nvim',
-  version = 'v0.3.0',
-  -- TODO - doesn't work, there seems to be an issue with the spawn job of plenary and the plugin - moliva - 2023/05/14
-  -- ft = 'toml',
+  event = "BufRead Cargo.toml",
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
     local crates = require('crates')
