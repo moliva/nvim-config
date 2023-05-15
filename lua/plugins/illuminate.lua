@@ -1,6 +1,6 @@
 return {
   'RRethy/vim-illuminate',
-  lazy = false,
+  event = { "BufReadPre", "BufNewFile" },
   keys = {
     -- vim.keymap.set("n", "<a-n>", require('illuminate').goto_next_reference)
     -- vim.keymap.set("n", "<a-p>", require('illuminate').goto_prev_reference)

@@ -136,10 +136,6 @@ return {
   },
 
   -- context menu keybindings
-  {
-    "folke/which-key.nvim",
-    lazy = true,
-  },
 
   -- rust tools
   -- use 'simrat39/rust-tools.nvim'
