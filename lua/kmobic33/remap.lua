@@ -49,7 +49,7 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- save on control s, control q for quitting and control x for quit/saving
 local modes = { 'n', 'i', 'v' }
 for _, mode in ipairs(modes) do
-  vim.keymap.set(mode, "<C-s>", "<cmd>w<CR>")
+  vim.keymap.set(mode, "<a-S>", "<cmd>w<CR>")
   vim.keymap.set(mode, "<C-x>", "<cmd>x<CR>")
   vim.keymap.set(mode, "<C-q>", "<cmd>q<CR>")
 
