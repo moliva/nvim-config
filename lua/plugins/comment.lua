@@ -1,8 +1,12 @@
 return {
   'numToStr/Comment.nvim',
   lazy = true,
-  -- TODO - add the visual block trigger as well - moliva - 2023/05/15
-  keys = { 'gc', 'gb' },
+  keys = {
+    'gc', 'gb',
+    -- when in visual modes, enable key triggers
+    { 'gc', nil, mode = 'v' },
+    { 'gc', nil, mode = 'x' }
+  },
   config = function()
     require('Comment').setup({
       ---LHS of operator-pending mappings in NORMAL and VISUAL mode

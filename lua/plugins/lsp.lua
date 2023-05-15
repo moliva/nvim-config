@@ -156,7 +156,7 @@ return {
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
-    cmd = 'LspInfo',
+    cmd = {'LspInfo', 'Mason'},
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       { 'hrsh7th/cmp-nvim-lsp' },
