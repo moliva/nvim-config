@@ -2,7 +2,7 @@ local opts = { noremap = true, silent = true }
 
 return {
   'romgrk/barbar.nvim',
-  lazy = true,
+  lazy = false,
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   keys = {
     -- Move to previous/next
