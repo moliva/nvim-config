@@ -1,6 +1,7 @@
 return {
   'numToStr/Comment.nvim',
   lazy = true,
+  -- TODO - add the visual block trigger as well - moliva - 2023/05/15
   keys = { 'gc', 'gb' },
   config = function()
     require('Comment').setup({

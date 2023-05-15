@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
 -- explore command for netrw
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore current dir" })
 
 -- move things around highlighted in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -67,4 +67,3 @@ vim.keymap.set("n", "<C-w>-", "<cmd>split<CR>")
 -- split current tab into two
 -- not used anymore with barbar
 -- vim.keymap.set("n", "<C-w>t", "<cmd>tab split<CR>")
-
