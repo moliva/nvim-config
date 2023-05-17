@@ -5,13 +5,15 @@ end
 return {
   'nvim-telescope/telescope.nvim',
   branch = '0.1.x',
-  -- lazy = false,
+  cmd = "Telescope",
   keys = {
     { '<C-p>',      function() require('telescope.builtin').git_files() end,   desc = "Look in git files" },
     { '<leader>pf', function() require('telescope.builtin').find_files() end,  desc = "Telescope find files" },
     { '<leader>ps', grep_string_input,                                         desc = "Telescope grep string with input" },
     { '<leader>pd', function() require('telescope.builtin').live_grep() end,   desc = "Telescope live grep" },
     { '<leader>pa', function() require('telescope.builtin').grep_string() end, desc = "Telescope grep string" },
+    { '<leader>ph', function() require('telescope.builtin').help_tags() end, desc = "Telescope help tags" },
+    { '<a-f>', function() require('telescope.builtin').buffers() end, desc = "Telescope buffers" },
   },
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()

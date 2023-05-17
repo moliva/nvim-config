@@ -1,6 +1,5 @@
 return {
   'numToStr/Comment.nvim',
-  lazy = true,
   keys = {
     'gc', 'gb',
     -- when in visual modes, enable key triggers
