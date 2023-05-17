@@ -22,14 +22,13 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- allows you to visual highlight text and paste over without replacing the buffer
 vim.keymap.set("x", "<leader>p", "\"_dP")
 
--- next greatest remap ever
--- yank to the sysmtem clipboard!
-vim.keymap.set("n", "<leader>y", "\"+y")
-vim.keymap.set("v", "<leader>y", "\"+y")
-vim.keymap.set("n", "<leader>Y", "\"+Y")
+vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d")
 
-vim.keymap.set("n", "<leader>d", "\"_d")
-vim.keymap.set("v", "<leader>d", "\"_d")
+-- next greatest remap ever
+-- yank to the system clipboard!
+vim.keymap.set({ "n", "v" }, "<leader>y", "\"+y")
+
+vim.keymap.set("n", "<leader>Y", "\"+Y")
 
 -- control c acts as escape in visual edit mode
 vim.keymap.set("i", "<C-c>", "<Esc>")
@@ -48,17 +47,15 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- save on control s, control q for quitting and control x for quit/saving
 local modes = { 'n', 'i', 'v' }
-for _, mode in ipairs(modes) do
-  vim.keymap.set(mode, "<a-S>", "<cmd>w<CR>")
-  vim.keymap.set(mode, "<C-x>", "<cmd>x<CR>")
-  vim.keymap.set(mode, "<C-q>", "<cmd>q<CR>")
+vim.keymap.set(modes, "<a-S>", "<cmd>w<CR>")
+vim.keymap.set(modes, "<C-x>", "<cmd>x<CR>")
+vim.keymap.set(modes, "<C-q>", "<cmd>q<CR>")
 
-  -- alternate file!
-  vim.keymap.set(mode, "<a-a>", "<cmd>e #<cr>")
+-- alternate file!
+vim.keymap.set(modes, "<a-a>", "<cmd>e #<cr>")
 
-  -- vim.keymap.set(mode, "<C-q>q", "<cmd>qa!<CR>")
-  -- vim.keymap.set(mode, "<C-x>x", "<cmd>xa!<CR>")
-end
+-- vim.keymap.set(modes, "<C-q>q", "<cmd>qa!<CR>")
+-- vim.keymap.set(modes, "<C-x>x", "<cmd>xa!<CR>")
 
 -- remap splits to the ones used in tmux
 vim.keymap.set("n", "<C-w>\\", "<cmd>vsplit<CR>")
@@ -67,3 +64,6 @@ vim.keymap.set("n", "<C-w>-", "<cmd>split<CR>")
 -- split current tab into two
 -- not used anymore with barbar
 -- vim.keymap.set("n", "<C-w>t", "<cmd>tab split<CR>")
+
+-- clear highlighted search
+vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>")
