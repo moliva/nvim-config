@@ -161,4 +161,10 @@ return {
       "rcarriga/nvim-notify",
     }
   },
+
+  {
+    'voldikss/vim-floaterm',
+    -- TODO - configure triggers - moliva - 2023/05/17
+    lazy = true
+  }
 }

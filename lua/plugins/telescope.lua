@@ -13,7 +13,9 @@ return {
     { '<leader>pd', function() require('telescope.builtin').live_grep() end,   desc = "Telescope live grep" },
     { '<leader>pa', function() require('telescope.builtin').grep_string() end, desc = "Telescope grep string" },
     { '<leader>ph', function() require('telescope.builtin').help_tags() end, desc = "Telescope help tags" },
-    { '<a-f>', function() require('telescope.builtin').buffers() end, desc = "Telescope buffers" },
+    { '<leader>pp', "<cmd>Telescope<cr>", desc = "Telescope introspection" },
+    { '<c-f>', function() require('telescope.builtin').buffers() end, desc = "Telescope buffers" },
+    { '<leader><tab>', function() require('telescope.builtin').commands() end, desc = "Telescope commands" },
   },
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
