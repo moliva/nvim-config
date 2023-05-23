@@ -1,11 +1,10 @@
 return {
   'RRethy/vim-illuminate',
-  event = { "BufReadPre", "BufNewFile" },
+  event = { 'CursorMoved', 'InsertLeave' },
   keys = {
-    -- vim.keymap.set("n", "<a-n>", require('illuminate').goto_next_reference)
-    -- vim.keymap.set("n", "<a-p>", require('illuminate').goto_prev_reference)
-    -- vim.keymap.set("n", "<a-i>", require('illuminate').textobj_select)
-    { "<a-i>", function() require('illuminate').textobj_select() end, desc = "Select current text object" }
+    { "<a-i>", function() require('illuminate').textobj_select() end,      desc = "Select current text object" },
+    { "<a-n>", function() require('illuminate').goto_next_reference() end, desc = "Illuminate go to next object reference" },
+    { "<a-p>", function() require('illuminate').goto_prev_reference() end, desc = "Illuminate go to prev object reference" },
   },
   config = function()
     -- default configuration

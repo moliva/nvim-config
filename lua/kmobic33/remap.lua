@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
 -- explore command for netrw
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore current dir" })
+-- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore current dir" })
 
 -- move things around highlighted in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
