@@ -24,6 +24,9 @@ vim.keymap.set("x", "<leader>p", "\"_dP")
 
 vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d")
 
+-- copy everything between { and } including the lines
+vim.keymap.set( "n", "YY", "va{Vy}")
+
 -- next greatest remap ever
 -- yank to the system clipboard!
 vim.keymap.set({ "n", "v" }, "<leader>y", "\"+y")
@@ -42,8 +45,9 @@ vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
+-- substitute the current visual selection in the entire buffer
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+vim.keymap.set("n", "<leader><leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- save on control s, control q for quitting and control x for quit/saving
 local modes = { 'n', 'i', 'v' }

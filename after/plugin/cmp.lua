@@ -5,10 +5,10 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 })
 
 -- format on sve
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  pattern = { "*.rs" },
-  callback = vim.lsp.buf.format
-})
+-- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+--   pattern = { "*.rs" },
+--   callback = vim.lsp.buf.format
+-- })
 
 vim.cmd [[
 augroup highlight_yank

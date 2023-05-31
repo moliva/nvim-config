@@ -29,7 +29,13 @@ return {
           enable = true,
           extended_mode = true,
           max_file_lines = nil,
-        }
+        },
+
+        query_linter = {
+          enable = true,
+          use_virtual_text = true,
+          lint_events = { "BufWrite", "CursorHold" },
+        },
       })
     end
   },

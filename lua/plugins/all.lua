@@ -1,5 +1,5 @@
 return {
-  -- theme
+  -- theme & ui
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -7,6 +7,17 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { "nvim-tree/nvim-web-devicons", 'RRethy/nvim-base16' }
+  },
+  {
+    "folke/noice.nvim",
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
   },
 
   -- issue here!
@@ -18,6 +29,25 @@ return {
   --
   -- tag = 'nightly' -- optional, updated every week. (see issue #1193)
   -- }
+
+  -- edit
+  {
+    'tpope/vim-surround',
+    event = { "BufReadPre", "BufNewFile" },
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      require("nvim-autopairs").setup {}
+    end
+  },
+  {
+    "AckslD/nvim-neoclip.lua",
+    -- TODO - review this - moliva - 2023/05/29
+    lazy = true,
+  },
+  -- use('tpope/vim-repeat')
 
   -- git utils
   {
@@ -38,53 +68,6 @@ return {
     event = { "BufReadPre *.lua" },
   },
 
-  -- edit
-  {
-    'tpope/vim-surround',
-    event = { "BufReadPre", "BufNewFile" },
-  },
-  {
-    'windwp/nvim-autopairs',
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      require("nvim-autopairs").setup {}
-    end
-  },
-  {
-    "AckslD/nvim-neoclip.lua",
-  },
-  -- use('tpope/vim-repeat')
-
-  -- context menu keybindings
-
-  -- rust tools
-  -- use 'simrat39/rust-tools.nvim'
-
-  {
-    'gbrlsnchs/telescope-lsp-handlers.nvim',
-    -- TODO - review this - moliva - 2023/05/14
-    lazy = true,
-  },
-
   -- typescript
   -- use 'jose-elias-alvarez/typescript.nvim'
-
-  -- better notifications
-  {
-    "folke/noice.nvim",
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    }
-  },
-
-  {
-    'voldikss/vim-floaterm',
-    -- TODO - configure triggers - moliva - 2023/05/17
-    lazy = true
-  }
 }

@@ -4,6 +4,10 @@ end
 
 return {
   {
+    'gbrlsnchs/telescope-lsp-handlers.nvim',
+    lazy = true,
+  },
+  {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     cmd = "Telescope",
@@ -27,6 +31,16 @@ return {
         '<leader>pd',
         function() require('telescope.builtin').live_grep() end,
         desc = "Telescope live grep"
+      },
+      {
+        '<leader>po',
+        function() require('telescope.builtin').lsp_document_symbols() end,
+        desc = "Telescope document symbols"
+      },
+      {
+        '<leader>pi',
+        function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
+        desc = "Telescope dynamic workspace symbols"
       },
       {
         '<leader>pa',
@@ -56,8 +70,6 @@ return {
     },
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
-      local builtin = require('telescope.builtin')
-
       local wk = require("which-key")
       wk.register({
         p = {
@@ -70,8 +82,26 @@ return {
       telescope.setup({
         extensions = {
           lsp_handlers = {
+            disable = {
+              ['callHierarchy/incomingCalls'] = true,
+              ['callHierarchy/outgoingCalls'] = true,
+            },
+            location = {
+              telescope = {},
+              no_results_message = 'No references found',
+            },
+            symbol = {
+              telescope = {},
+              no_results_message = 'No symbols found',
+            },
+            call_hierarchy = {
+              telescope = {},
+              no_results_message = 'No calls found',
+            },
             code_action = {
               telescope = require('telescope.themes').get_dropdown({}),
+              no_results_message = 'No code actions available',
+              prefix = '',
             },
           },
         },
@@ -84,32 +114,6 @@ return {
       telescope.load_extension('fzf')
 
       telescope.load_extension('neoclip')
-
-      -- telescope.setup({
-      -- 	extensions = {
-      -- 		lsp_handlers = {
-      -- 			disable = {},
-      -- 			location = {
-      -- 				telescope = {},
-      -- 				no_results_message = 'No references found',
-      -- 			},
-      -- 			symbol = {
-      -- 				telescope = {},
-      -- 				no_results_message = 'No symbols found',
-      -- 			},
-      -- 			call_hierarchy = {
-      -- 				telescope = {},
-      -- 				no_results_message = 'No calls found',
-      -- 			},
-      -- 			code_action = {
-      -- 				telescope = {},
-      -- 				no_results_message = 'No code actions available',
-      -- 				prefix = '',
-      -- 			},
-      -- 		},
-      -- 	}
-      -- })
-      --
     end
   },
   {

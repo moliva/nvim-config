@@ -3,6 +3,8 @@ M = {}
 local function local_attach(_client, bufnr)
   local opts = { buffer = bufnr, remap = false }
 
+  local wk = require("which-key")
+
   -- symbols
   -- vim.keymap.set("n", "<leader>o", "<cmd>SymbolsOutline<CR>")
 
@@ -23,6 +25,7 @@ local function local_attach(_client, bufnr)
   -- vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
   vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
   vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
+  vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
 
   -- lsp workspace folders management
   vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
@@ -36,7 +39,6 @@ local function local_attach(_client, bufnr)
   --   vim.lsp.buf.format({ async = true })
   -- end, opts)
 
-  local wk = require("which-key")
   wk.register({
     g = {
       name = "Go to",
@@ -61,15 +63,36 @@ local function local_attach(_client, bufnr)
       -- name = "SSSS",
       -- d = { "<cmd>Telescope diagnostics<cr>", "Telescope diagnostics" }
       -- }
-      f = { "<cmd>Telescope diagnostics<cr>", "Telescope diagnostics" }
+      f = { "<cmd>Telescope diagnostics<cr>", "Telescope diagnostics" },
       -- show diagnostics at cursor/in project (in fuzzy finder)
       -- vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
       -- vim.keymap.set("n", "<leader>vsd", "<cmd>Telescope diagnostics<cr>", opts)
+      i = { function()
+        vim.lsp.buf.incoming_calls()
+        require('litee.calltree').open_to()
+      end, "Incoming calls" },
+      o = {
+        function()
+          vim.lsp.buf.outgoing_calls()
+          require('litee.calltree').open_to()
+        end, "Outgoing calls" },
     },
-  }, { prefix = "<leader>" })
+  }, { prefix = "<leader>", opts })
 end
 
 return {
+  -- call tree to be used by lsp zero
+  {
+    'ldelossa/litee-calltree.nvim',
+    dependencies = 'ldelossa/litee.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      -- configure the litee.nvim library
+      require('litee.lib').setup({})
+      -- configure litee-calltree.nvim
+      require('litee.calltree').setup({})
+    end
+  },
 
   -- Autocompletion
   {
