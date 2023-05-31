@@ -22,10 +22,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- allows you to visual highlight text and paste over without replacing the buffer
 vim.keymap.set("x", "<leader>p", "\"_dP")
 
-vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d")
+vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = "Delete into an anonymous buffer" })
 
 -- copy everything between { and } including the lines
-vim.keymap.set( "n", "YY", "va{Vy}")
+vim.keymap.set("n", "YY", "va{Vy}")
 
 -- next greatest remap ever
 -- yank to the system clipboard!

@@ -1,30 +1,16 @@
-local opts = { silent = true, noremap = true }
+local cmdopts = { silent = true, noremap = true }
 
 return {
   "folke/trouble.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   keys = {
-    { "<leader>xx", "<cmd>TroubleToggle<cr>",          desc = "<cmd>TroubleToggle<cr>",          opts },
-    {
-      "<leader>xw",
-      "<cmd>TroubleToggle workspace_diagnostics<cr>",
-      desc = "<cmd>TroubleToggle workspace_diagnostics<cr>",
-      opts
-    },
-    {
-      "<leader>xd",
-      "<cmd>TroubleToggle document_diagnostics<cr>",
-      desc = "<cmd>TroubleToggle document_diagnostics<cr>",
-      opts
-    },
-    { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",  desc = "<cmd>TroubleToggle loclist<cr>",  opts },
-    { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", desc = "<cmd>TroubleToggle quickfix<cr>", opts },
-    {
-      "gR",
-      "<cmd>TroubleToggle lsp_references<cr>",
-      desc = "<cmd>TroubleToggle lsp_references<cr>",
-      opts
-    },
+    { "<leader>x",  nil,                                            desc = "Trouble" },
+    { "<leader>xx", "<cmd>TroubleToggle<cr>",                       desc = "TroubleToggle",                       cmdopts },
+    { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "TroubleToggle workspace_diagnostics", cmdopts },
+    { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>",  desc = "TroubleToggle document_diagnostics",  cmdopts },
+    { "<leader>xl", "<cmd>TroubleToggle loclist<cr>",               desc = "TroubleToggle loclist",               cmdopts },
+    { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>",              desc = "TroubleToggle quickfix",              cmdopts },
+    { "gR",         "<cmd>TroubleToggle lsp_references<cr>",        desc = "TroubleToggle lsp_references",        cmdopts },
   },
   config = function()
     local opts = {

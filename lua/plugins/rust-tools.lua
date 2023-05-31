@@ -1,8 +1,28 @@
 return {
   {
     'simrat39/rust-tools.nvim',
+    ft = "rust",
     config = function()
       local ih = require("inlay-hints")
+
+      local rt = require('rust-tools')
+
+      -- local mason_registry = require("mason-registry")
+      -- local codelldb = mason_registry.get_package("codelldb")
+      -- local extension_path = codelldb:get_install_path() .. "/extension/"
+
+      -- local codelldb_path = extension_path .. "adapter/codelldb"
+      -- local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
+
+      local capabilities = require("kmobic33.lsp").get_capabilities()
+      local server = require("kmobic33.rust_analyzer").config(capabilities)
+      server.on_attach = function(client, bufnr)
+        require("kmobic33.lsp").on_attach(client, bufnr)
+        -- Hover actions
+        vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+        -- Code action groups
+        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      end
 
       local opts = {
         tools = {
@@ -67,7 +87,7 @@ return {
             max_height = nil,
             -- whether the hover action window gets automatically focused
             -- default: false
-            auto_focus = false,
+            auto_focus = true,
           },
           -- settings for showing the crate graph based on graphviz and the dot
           -- command
@@ -84,86 +104,25 @@ return {
             -- crates
             -- default: true
             full = true,
-            -- List of backends found on: https://graphviz.org/docs/outputs/
-            -- Is used for input validation and autocompletion
-            -- Last updated: 2021-08-26
-            enabled_graphviz_backends = {
-              "bmp",
-              "cgimage",
-              "canon",
-              "dot",
-              "gv",
-              "xdot",
-              "xdot1.2",
-              "xdot1.4",
-              "eps",
-              "exr",
-              "fig",
-              "gd",
-              "gd2",
-              "gif",
-              "gtk",
-              "ico",
-              "cmap",
-              "ismap",
-              "imap",
-              "cmapx",
-              "imap_np",
-              "cmapx_np",
-              "jpg",
-              "jpeg",
-              "jpe",
-              "jp2",
-              "json",
-              "json0",
-              "dot_json",
-              "xdot_json",
-              "pdf",
-              "pic",
-              "pct",
-              "pict",
-              "plain",
-              "plain-ext",
-              "png",
-              "pov",
-              "ps",
-              "ps2",
-              "psd",
-              "sgi",
-              "svg",
-              "svgz",
-              "tga",
-              "tiff",
-              "tif",
-              "tk",
-              "vml",
-              "vmlz",
-              "wbmp",
-              "webp",
-              "xlib",
-              "x11",
-            },
           },
         },
         -- all the opts to send to nvim-lspconfig
         -- these override the defaults set by rust-tools.nvim
         -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-        server = {
-          -- standalone file support
-          -- setting it to false may improve startup time
-          standalone = true,
-        }, -- rust-analyzer options
+        -- server = {
+        --   -- standalone file support
+        --   -- setting it to false may improve startup time
+        --   standalone = true,
+        -- },
+        server = server,
+        -- rust-analyzer options
         -- debugging stuff
         dap = {
-          adapter = {
-            type = "executable",
-            command = "lldb-vscode",
-            name = "rt_lldb",
-          },
+          -- adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
         },
       }
 
-      require('rust-tools').setup(opts)
+      rt.setup(opts)
     end
   }
 }

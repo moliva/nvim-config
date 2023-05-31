@@ -1,85 +1,3 @@
-M = {}
-
-local function local_attach(_client, bufnr)
-  local opts = { buffer = bufnr, remap = false }
-
-  local wk = require("which-key")
-
-  -- symbols
-  -- vim.keymap.set("n", "<leader>o", "<cmd>SymbolsOutline<CR>")
-
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, opts)
-
-  -- show next/prev error in file
-  vim.keymap.set("n", "<a-.>", vim.diagnostic.goto_next, opts)
-  vim.keymap.set("n", "<a-,>", vim.diagnostic.goto_prev, opts)
-  -- vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-  -- vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-
-  vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
-
-  -- input a name/filter to look for a symbol in the workspaces
-  vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
-  -- vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
-  -- vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
-  vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
-  vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
-  vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
-
-  -- lsp workspace folders management
-  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
-  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
-  vim.keymap.set('n', '<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, opts)
-
-  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
-  -- vim.keymap.set("n", "<leader>f", function()
-  --   vim.lsp.buf.format({ async = true })
-  -- end, opts)
-
-  wk.register({
-    g = {
-      name = "Go to",
-      d = { vim.lsp.buf.definition, "Go to definition" },
-      y = { vim.lsp.buf.type_definition, "Go to type definition" },
-      i = { vim.lsp.buf.implementation, "Go to implementation" }
-    },
-  })
-
-  -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-  -- vim.keymap.set("n", "gy",  opts)
-  -- vim.keymap.set("n", "gi", opts)
-  wk.register({
-    v = {
-      name = "Vim",
-      c = {
-        name = "Code",
-        a = { vim.lsp.buf.code_action, "Actions from LSP to the current line" }
-      },
-      d = { vim.diagnostic.open_float, "Diagnostics float" },
-      -- s = {
-      -- name = "SSSS",
-      -- d = { "<cmd>Telescope diagnostics<cr>", "Telescope diagnostics" }
-      -- }
-      f = { "<cmd>Telescope diagnostics<cr>", "Telescope diagnostics" },
-      -- show diagnostics at cursor/in project (in fuzzy finder)
-      -- vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-      -- vim.keymap.set("n", "<leader>vsd", "<cmd>Telescope diagnostics<cr>", opts)
-      i = { function()
-        vim.lsp.buf.incoming_calls()
-        require('litee.calltree').open_to()
-      end, "Incoming calls" },
-      o = {
-        function()
-          vim.lsp.buf.outgoing_calls()
-          require('litee.calltree').open_to()
-        end, "Outgoing calls" },
-    },
-  }, { prefix = "<leader>", opts })
-end
-
 return {
   -- call tree to be used by lsp zero
   {
@@ -223,16 +141,13 @@ return {
 
       local on_attach = function(c, b)
         -- require('lsp_mappings').on_attach(c, b)
-        local_attach(c, b)
+        require("kmobic33.lsp").on_attach(c, b)
         require("inlay-hints").on_attach(c, b)
       end
 
       lsp.on_attach(on_attach)
 
-      local cmp_nvim_lsp = require('cmp_nvim_lsp')
-
-      local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
+      local capabilities = require("kmobic33.lsp").get_capabilities()
 
       -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
@@ -292,7 +207,6 @@ return {
         },
       })
 
-
       lspconfig.jsonls.setup({
         capabilities = capabilities,
         init_options = {
@@ -305,102 +219,7 @@ return {
         }
       })
 
-      lspconfig.rust_analyzer.setup({
-        capabilities = capabilities,
-        cmd = {
-          "rustup", "run", "stable", "rust-analyzer"
-          -- "ra-multiplex", "--ra-mux-server", "/Users/moliva/.rustup/toolchains/stable-x86_64-apple-darwin/bin/rust-analyzer"
-        },
-        settings = {
-          ['rust-analyzer'] = {
-            -- server = {
-            --   path = '/Users/moliva/.cargo/bin/ra-multiplex'
-            -- },
-            -- enable clippy on save
-            -- checkOnSave = {
-            --   command = "clippy",
-            -- },
-            check = {
-              command = "clippy",
-            },
-            diagnostics = {
-              enable = true,
-              disabled = { "unresolved-proc-macro" },
-              enableExperimental = true,
-            },
-            inlayHints = {
-              bindingModeHints = {
-                enable = true
-              },
-              chainingHints = {
-                enable = true
-              },
-              closingBraceHints = {
-                enable = true
-              },
-              closureReturnTypeHints = {
-                enable = true
-              },
-            }
-          }
-          -- rust-analyzer.inlayHints.bindingModeHints.enable (default: false)
-          -- Whether to show inlay type hints for binding modes.
-          --
-          -- rust-analyzer.inlayHints.chainingHints.enable (default: true)
-          -- Whether to show inlay type hints for method chains.
-          --
-          -- rust-analyzer.inlayHints.closingBraceHints.enable (default: true)
-          -- Whether to show inlay hints after a closing } to indicate what item it belongs to.
-          --
-          -- rust-analyzer.inlayHints.closingBraceHints.minLines (default: 25)
-          -- Minimum number of lines required before the } until the hint is shown (set to 0 or 1 to always show them).
-          --
-          -- rust-analyzer.inlayHints.closureReturnTypeHints.enable (default: "never")
-          -- Whether to show inlay type hints for return types of closures.
-          --
-          -- rust-analyzer.inlayHints.closureStyle (default: "impl_fn")
-          -- Closure notation in type and chaining inaly hints.
-          --
-          -- rust-analyzer.inlayHints.discriminantHints.enable (default: "never")
-          -- Whether to show enum variant discriminant hints.
-          --
-          -- rust-analyzer.inlayHints.expressionAdjustmentHints.enable (default: "never")
-          -- Whether to show inlay hints for type adjustments.
-          --
-          -- rust-analyzer.inlayHints.expressionAdjustmentHints.hideOutsideUnsafe (default: false)
-          -- Whether to hide inlay hints for type adjustments outside of unsafe blocks.
-          --
-          -- rust-analyzer.inlayHints.expressionAdjustmentHints.mode (default: "prefix")
-          -- Whether to show inlay hints as postfix ops (. instead of , etc).
-          --
-          -- rust-analyzer.inlayHints.lifetimeElisionHints.enable (default: "never")
-          -- Whether to show inlay type hints for elided lifetimes in function signatures.
-          --
-          -- rust-analyzer.inlayHints.lifetimeElisionHints.useParameterNames (default: false)
-          -- Whether to prefer using parameter names as the name for elided lifetime hints if possible.
-          --
-          -- rust-analyzer.inlayHints.maxLength (default: 25)
-          -- Maximum length for inlay hints. Set to null to have an unlimited length.
-          --
-          -- rust-analyzer.inlayHints.parameterHints.enable (default: true)
-          -- Whether to show function parameter name inlay hints at the call site.
-          --
-          -- rust-analyzer.inlayHints.reborrowHints.enable (default: "never")
-          -- Whether to show inlay hints for compiler inserted reborrows. This setting is deprecated in favor of rust-analyzer.inlayHints.expressionAdjustmentHints.enable.
-          --
-          -- rust-analyzer.inlayHints.renderColons (default: true)
-          -- Whether to render leading colons for type hints, and trailing colons for parameter hints.
-          --
-          -- rust-analyzer.inlayHints.typeHints.enable (default: true)
-          -- Whether to show inlay type hints for variables.
-          --
-          -- rust-analyzer.inlayHints.typeHints.hideClosureInitialization (default: false)
-          -- Whether to hide inlay type hints for let statements that initialize to a closure. Only applies to closures with blocks, same as rust-analyzer.inlayHints.closureReturnTypeHints.enable.
-          --
-          -- rust-analyzer.inlayHints.typeHints.hideNamedConstructor (default: false)
-          -- Whether to hide inlay type hints for constructors.
-        }
-      })
+      lsp.skip_server_setup({'rust_analyzer'})
 
       lsp.setup()
 

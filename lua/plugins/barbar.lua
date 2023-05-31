@@ -30,6 +30,7 @@ return {
     { '<leader>bd', '<Cmd>BufferOrderByDirectory<CR>',    desc = "Order by directory" },
     { '<leader>bl', '<Cmd>BufferOrderByLanguage<CR>',     desc = "Order by language" },
     { '<leader>bw', '<Cmd>BufferOrderByWindowNumber<CR>', desc = "Order by window number" }
+    -- close all other tabs?
   },
   config1 = function()
     local map = vim.api.nvim_set_keymap
