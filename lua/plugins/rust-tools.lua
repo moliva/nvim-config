@@ -7,21 +7,22 @@ return {
 
       local rt = require('rust-tools')
 
-      -- local mason_registry = require("mason-registry")
-      -- local codelldb = mason_registry.get_package("codelldb")
+      local mason_registry = require("mason-registry")
+      local codelldb = mason_registry.get_package("codelldb")
       -- local extension_path = codelldb:get_install_path() .. "/extension/"
+      local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.9.0/"
 
-      -- local codelldb_path = extension_path .. "adapter/codelldb"
-      -- local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
+      local codelldb_path = extension_path .. "adapter/codelldb"
+      local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
 
       local capabilities = require("kmobic33.lsp").get_capabilities()
       local server = require("kmobic33.rust_analyzer").config(capabilities)
       server.on_attach = function(client, bufnr)
         require("kmobic33.lsp").on_attach(client, bufnr)
         -- Hover actions
-        vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+        vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr, desc = "Hover actions" })
         -- Code action groups
-        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr, desc = "Code action" })
       end
 
       local opts = {
@@ -118,7 +119,7 @@ return {
         -- rust-analyzer options
         -- debugging stuff
         dap = {
-          -- adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+          adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
         },
       }
 
