@@ -6,8 +6,8 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   keys = {
     -- Move to previous/next
-    { '<A-j>',      '<Cmd>BufferPrevious<CR>',            opts },
-    { '<A-k>',      '<Cmd>BufferNext<CR>',                opts },
+    { '<A-J>',      '<Cmd>BufferPrevious<CR>',            opts },
+    { '<A-K>',      '<Cmd>BufferNext<CR>',                opts },
     -- Re-order to previous/next
     { '<A-<>',      '<Cmd>BufferMovePrevious<CR>',        opts },
     { '<A->>',      '<Cmd>BufferMoveNext<CR>',            opts },

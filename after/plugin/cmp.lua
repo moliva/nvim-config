@@ -4,12 +4,13 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
   command = "hi NormalNC ctermbg=NONE guibg=NONE"
 })
 
--- format on sve
+-- format on save
 -- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 --   pattern = { "*.rs" },
 --   callback = vim.lsp.buf.format
 -- })
 
+-- highglight text on yank
 vim.cmd [[
 augroup highlight_yank
 autocmd!

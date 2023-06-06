@@ -1,19 +1,44 @@
 return {
   {
     'rcarriga/nvim-dap-ui',
-    lazy = true,
     keys = {
-      { "<leader>c",  nil,                            desc = "Debug" },
-      { "<leader>ct", "<cmd>DapToggleBreakpoint<cr>", desc = "ToggleBreakpoint" },
-      { "<leader>cc", "<cmd>DapContinue<cr>",         desc = "Continue" },
-      { "<leader>cx", "<cmd>DapTerminate<cr>",        desc = "Terminate" },
-      { "<leader>co", "<cmd>DapStepOver<cr>",         desc = "Step Into" },
-      { "<leader>ci", "<cmd>DapStepInto<cr>",         desc = "Step Into" },
-      { "<leader>cu", "<cmd>DapStepOut<cr>",          desc = "Step Out" },
-      { "<leader>cr", "<cmd>DapRestartFrame<cr>",     desc = "Restart Frame" },
+      { "<leader>c",  nil,                        desc = "Debug" },
+      {
+        "<leader>ct",
+        function()
+          require("dap").toggle_breakpoint()
+          require("kmobic33.breakpoints").store()
+        end,
+        desc = "Toggle Breakpoint"
+      },
+      {
+        "<leader>cg",
+        function()
+          require('dap').set_breakpoint(vim.fn.input('[Condition] > '))
+          require("kmobic33.breakpoints").store()
+        end,
+        desc = "Set Conditional Breakpoint"
+      },
+      {
+        "<leader>cd",
+        function()
+          require "dap".clear_breakpoints()
+          require("kmobic33.breakpoints").store()
+        end,
+        desc = "Clear Breakpoints"
+      },
+      { "<leader>cc", "<cmd>DapContinue<cr>",     desc = "Continue" },
+      { "<leader>cx", "<cmd>DapTerminate<cr>",    desc = "Terminate" },
+      { "<leader>co", "<cmd>DapStepOver<cr>",     desc = "Step Over" },
+      { "<leader>ci", "<cmd>DapStepInto<cr>",     desc = "Step Into" },
+      { "<leader>cu", "<cmd>DapStepOut<cr>",      desc = "Step Out" },
+      { "<leader>cr", "<cmd>DapRestartFrame<cr>", desc = "Restart Frame" },
     },
     config = function()
       require("nvim-dap-virtual-text").setup()
+
+      -- Load breakpoints
+      require("kmobic33.breakpoints").load()
 
       local dapui = require("dapui")
 

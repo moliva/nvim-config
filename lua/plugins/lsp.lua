@@ -131,7 +131,6 @@ return {
         },
       })
 
-
       lsp.ensure_installed({
         'tsserver',
         'eslint',

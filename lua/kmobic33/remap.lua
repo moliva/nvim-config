@@ -71,3 +71,7 @@ vim.keymap.set("n", "<C-w>-", "<cmd>split<CR>")
 
 -- clear highlighted search
 vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>")
+
+-- move line up or down
+vim.keymap.set({ "n", "i", "v" }, "<a-k>", "<cmd>m .-2<cr>")
+vim.keymap.set({ "n", "i", "v" }, "<a-j>", "<cmd>m .+1<cr>")
