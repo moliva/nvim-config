@@ -52,7 +52,7 @@ vim.keymap.set("n", "<leader><leader>x", "<cmd>!chmod +x %<CR>", { silent = true
 -- save on control s, control q for quitting and control x for quit/saving
 local modes = { 'n', 'i', 'v' }
 vim.keymap.set(modes, "<a-S>", "<cmd>w<CR>")
-vim.keymap.set(modes, "<C-x>", "<cmd>x<CR>")
+-- vim.keymap.set(modes, "<C-x>", "<cmd>x<CR>")
 vim.keymap.set(modes, "<C-q>", "<cmd>q<CR>")
 
 -- alternate file!

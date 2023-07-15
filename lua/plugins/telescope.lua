@@ -58,6 +58,11 @@ return {
         desc = "Telescope introspection"
       },
       {
+        '<leader>pr',
+        "<cmd>Telescope harpoon marks<cr>",
+        desc = "Telescope harpoon marks"
+      },
+      {
         '<c-f>',
         function() require('telescope.builtin').buffers() end,
         desc = "Telescope buffers"
