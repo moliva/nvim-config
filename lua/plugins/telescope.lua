@@ -4,6 +4,18 @@ end
 
 return {
   {
+    "danielfalk/smart-open.nvim",
+    branch = "0.2.x",
+    lazy = true,
+    dependencies = {
+      "kkharji/sqlite.lua",
+      -- Only required if using match_algorithm fzf
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      -- Optional.  If installed, native fzy will be used when match_algorithm is fzy
+      -- { "nvim-telescope/telescope-fzy-native.nvim" },
+    },
+  },
+  {
     'gbrlsnchs/telescope-lsp-handlers.nvim',
     lazy = true,
   },
@@ -18,7 +30,14 @@ return {
         desc = "Look in git files"
       },
       {
+        -- adopting new smart open
         '<leader>pf',
+        "<cmd>Telescope smart_open<cr>",
+        desc = "Telescope smart_open"
+      },
+      {
+        -- leaving old telescope find files for backup
+        '<leader><leader>pf',
         function() require('telescope.builtin').find_files() end,
         desc = "Telescope find files"
       },
@@ -86,6 +105,12 @@ return {
 
       telescope.setup({
         extensions = {
+          smart_open = {
+            show_scores = false,
+            ignore_patterns = { "*.git/*", "*/tmp/*" },
+            match_algorithm = "fzf",
+            disable_devicons = false,
+          },
           lsp_handlers = {
             disable = {
               ['callHierarchy/incomingCalls'] = true,
@@ -111,6 +136,8 @@ return {
           },
         },
       })
+
+      telescope.load_extension("smart_open")
 
       telescope.load_extension('lsp_handlers')
 
