@@ -152,6 +152,9 @@ return {
 
       local lspconfig = require('lspconfig')
 
+
+      lspconfig.csharp_ls.setup({})
+
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
         settings = {

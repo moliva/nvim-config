@@ -32,7 +32,13 @@ return {
       {
         -- adopting new smart open
         '<leader>pf',
-        "<cmd>Telescope smart_open<cr>",
+        function()
+          require('telescope').extensions.smart_open.smart_open {
+            cwd_only = true,
+            filename_first = false,
+          }
+        end,
+        -- "<cmd>Telescope smart_open<cr>",
         desc = "Telescope smart_open"
       },
       {
