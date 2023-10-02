@@ -52,24 +52,24 @@ return {
     local wk = require("which-key")
 
     wk.register({
-      t = { crates.toggle, "crates.toggle" },
-      r = { crates.reload, "crates.reload" },
-      v = { crates.show_versions_popup, "crates.show_versions_popup" },
-      f = { crates.show_features_popup, "crates.show_features_popup" },
-      d = { crates.show_dependencies_popup, "crates.show_dependencies_popup" },
-      u = { crates.update_crate, "crates.update_crate" },
-      a = { crates.update_all_crates, "crates.update_all_crates" },
-      U = { crates.upgrade_crate, "crates.upgrade_crate" },
-      A = { crates.upgrade_all_crates, "crates.upgrade_all_crates" },
-      H = { crates.open_homepage, "crates.open_homepage" },
-      R = { crates.open_repository, "crates.open_repository" },
-      D = { crates.open_documentation, "crates.open_documentation" },
-      C = { crates.open_crates_io, "crates.open_crates_io" },
-    }, { prefix = "<leader>c", silent = true })
+      t = { crates.toggle, "Toggle" },
+      r = { crates.reload, "Reload" },
+      v = { crates.show_versions_popup, "Show versions popup" },
+      f = { crates.show_features_popup, "Show features popup" },
+      d = { crates.show_dependencies_popup, "Show dependencies popup" },
+      u = { crates.update_crate, "Update crate" },
+      a = { crates.update_all_crates, "Update all crates" },
+      U = { crates.upgrade_crate, "Upgrade crate" },
+      A = { crates.upgrade_all_crates, "Upgrade all crates" },
+      H = { crates.open_homepage, "Open homepage" },
+      R = { crates.open_repository, "Open repository" },
+      D = { crates.open_documentation, "Open documentation" },
+      C = { crates.open_crates_io, "Open crates.io" },
+    }, { prefix = "<leader>r", silent = true, desc = "Crates" })
 
     wk.register({
-      u = { crates.update_crates, "crates.update_crates" },
-      U = { crates.upgrade_crates, "crates.upgrade_crates" },
-    }, { prefix = "<leader>c", mode = 'v', silent = true })
+      u = { crates.update_crates, "Update crates" },
+      U = { crates.upgrade_crates, "Upgrade crates" },
+    }, { prefix = "<leader>r", silent = true, desc = "Crates", mode = 'v' })
   end
 }
