@@ -3,6 +3,7 @@ return {
     'ThePrimeagen/harpoon',
     lazy = true,
     keys = {
+      { '<leader>h', nil,        desc = "Harpoon" },
       { '<leader>ha', function() require("harpoon.mark").add_file() end,        desc = "Mark file as harpooned" },
       { '<a-h><a-h>', function() require('harpoon.ui').toggle_quick_menu() end, desc = "Harpoon quick menu" },
       { '<a-h>a',     function() require('harpoon.ui').nav_file(1) end,         desc = "Navigate to harpooned file 1", },

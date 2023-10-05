@@ -26,6 +26,7 @@ return {
     { '<A-q>',      '<Cmd>BufferClose<CR>',               opts },
     { '<A-e>',      '<Cmd>BufferClose!<CR>',              opts },
     -- Reorder tabs
+    { '<leader>b',  nil,                                  desc = "Barbar" },
     { '<leader>bb', '<Cmd>BufferOrderByBufferNumber<CR>', desc = "Order by buffer number" },
     { '<leader>bd', '<Cmd>BufferOrderByDirectory<CR>',    desc = "Order by directory" },
     { '<leader>bl', '<Cmd>BufferOrderByLanguage<CR>',     desc = "Order by language" },
