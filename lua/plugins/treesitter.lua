@@ -3,6 +3,9 @@ return {
     'windwp/nvim-ts-autotag',
     -- should be triggered by the treesitter autotag config below
     lazy = true,
+    config = function()
+      require('nvim-ts-autotag').setup()
+    end
   },
   -- ast and highlighting
   {
@@ -10,6 +13,9 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     build = ':TSUpdate',
     config = function()
+      -- force nvim-ts-autotag to be loaded here
+      require('nvim-ts-autotag')
+
       require('nvim-treesitter.configs').setup({
         autotag = {
           enable = true,
