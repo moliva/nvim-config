@@ -320,6 +320,8 @@ return {
       ls.cleanup()
 
       ls.add_snippets("all", {
+        parse("separator",
+          "$LINE_COMMENT *****************************************************************************************************\n$LINE_COMMENT *************** ${1:separator} ***************\n$LINE_COMMENT *****************************************************************************************************\n"),
         parse("todo",
           "$LINE_COMMENT ${1|TODO,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"),
         -- s("todo1", fmt("{} {} - {} - moliva - {}", { t("//"), c(1, { t("TODO"), t("FIXME"), t("XXX") }), i(2, "description"), f(function()
