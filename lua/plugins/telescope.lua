@@ -30,7 +30,6 @@ return {
         desc = "Look in git files"
       },
       {
-        -- adopting new smart open
         '<leader>pf',
         function()
           require('telescope').extensions.smart_open.smart_open {
@@ -38,8 +37,18 @@ return {
             filename_first = false,
           }
         end,
-        -- "<cmd>Telescope smart_open<cr>",
         desc = "Telescope smart_open"
+      },
+      {
+        -- global search
+        '<leader>pF',
+        function()
+          require('telescope').extensions.smart_open.smart_open {
+            cwd_only = false,
+            filename_first = false,
+          }
+        end,
+        desc = "Telescope smart_open (global)"
       },
       {
         -- leaving old telescope find files for backup
