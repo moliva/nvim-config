@@ -18,8 +18,6 @@ vim.opt.undofile = true
 
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
--- clear highlighted search
-vim.keymap.set("n", ",", "<cmd>set hlsearch! hlsearch?<CR>")
 -- case insensitive searching
 vim.opt.ignorecase = true
 -- case-sensitive if expresson contains a capital letter

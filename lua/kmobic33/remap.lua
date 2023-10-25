@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
 -- explore command for netrw
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+-- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore current dir" })
 
 -- move things around highlighted in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -22,43 +22,44 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- allows you to visual highlight text and paste over without replacing the buffer
 vim.keymap.set("x", "<leader>p", "\"_dP")
 
--- next greatest remap ever
--- yank to the sysmtem clipboard!
-vim.keymap.set("n", "<leader>y", "\"+y")
-vim.keymap.set("v", "<leader>y", "\"+y")
-vim.keymap.set("n", "<leader>Y", "\"+Y")
+vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = "Delete into an anonymous buffer" })
 
-vim.keymap.set("n", "<leader>d", "\"_d")
-vim.keymap.set("v", "<leader>d", "\"_d")
+-- copy everything between { and } including the lines
+vim.keymap.set("n", "YY", "va{Vy}")
+
+-- next greatest remap ever
+-- yank to the system clipboard!
+vim.keymap.set({ "n", "v" }, "<leader>y", "\"+y")
+
+vim.keymap.set("n", "<leader>Y", "\"+Y")
 
 -- control c acts as escape in visual edit mode
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.keymap.set("n", "Q", "<nop>")
 -- changes to another tmux session
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+-- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
 -- vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 -- vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
+-- substitute the current visual selection in the entire buffer
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+vim.keymap.set("n", "<leader><leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- save on control s, control q for quitting and control x for quit/saving
 local modes = { 'n', 'i', 'v' }
-for _, mode in ipairs(modes) do
-  vim.keymap.set(mode, "<C-s>", "<cmd>w<CR>")
-  vim.keymap.set(mode, "<C-x>", "<cmd>x<CR>")
-  vim.keymap.set(mode, "<C-q>", "<cmd>q<CR>")
+vim.keymap.set(modes, "<a-S>", "<cmd>w<CR>")
+-- vim.keymap.set(modes, "<C-x>", "<cmd>x<CR>")
+vim.keymap.set(modes, "<C-q>", "<cmd>q<CR>")
 
-  -- alternate file!
-  vim.keymap.set(mode, "<a-a>", "<cmd>e #<cr>")
+-- alternate file!
+vim.keymap.set(modes, "<a-a>", "<cmd>e #<cr>")
 
-  -- vim.keymap.set(mode, "<C-q>q", "<cmd>qa!<CR>")
-  -- vim.keymap.set(mode, "<C-x>x", "<cmd>xa!<CR>")
-end
+-- vim.keymap.set(modes, "<C-q>q", "<cmd>qa!<CR>")
+-- vim.keymap.set(modes, "<C-x>x", "<cmd>xa!<CR>")
 
 -- remap splits to the ones used in tmux
 vim.keymap.set("n", "<C-w>\\", "<cmd>vsplit<CR>")
@@ -68,3 +69,9 @@ vim.keymap.set("n", "<C-w>-", "<cmd>split<CR>")
 -- not used anymore with barbar
 -- vim.keymap.set("n", "<C-w>t", "<cmd>tab split<CR>")
 
+-- clear highlighted search
+vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>")
+
+-- move line up or down
+vim.keymap.set({ "n", "i", "v" }, "<a-k>", "<cmd>m .-2<cr>")
+vim.keymap.set({ "n", "i", "v" }, "<a-j>", "<cmd>m .+1<cr>")
