@@ -36,6 +36,34 @@ return {
       { "<leader>u", vim.cmd.UndotreeToggle }
     }
   },
+  {
+    'kevinhwang91/nvim-ufo',
+    dependencies = 'kevinhwang91/promise-async',
+    lazy = true,
+    keys = {
+      --   -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+      { 'zR', function() require('ufo').openAllFolds() end,  desc = "Open all folds" },
+      { 'zM', function() require('ufo').closeAllFolds() end, desc = "Close all folds" },
+      {
+        'zK',
+        function()
+          local winid = require('ufo').peekFoldedLinesUnderCursor()
+          if not winid then
+            vim.lsp.buf.hover()
+          end
+        end,
+        desc = "Peek fold"
+      },
+    },
+    config = function()
+      require('lsp-zero')
+      require('ufo').setup({
+        provider_selector = function(_, _, _)
+          return { 'lsp', 'indent' }
+        end
+      })
+    end
+  },
 
   -- lua
   {
