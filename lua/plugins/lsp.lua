@@ -19,6 +19,7 @@ return {
     dependencies = {
       { 'hrsh7th/cmp-buffer' }, { 'hrsh7th/cmp-path' }, { 'saadparwaiz1/cmp_luasnip' },
       { 'hrsh7th/cmp-nvim-lua' }, -- Snippets
+      { 'hrsh7th/cmp-cmdline' },
       { 'L3MON4D3/LuaSnip' }, { 'rafamadriz/friendly-snippets' },
       { "onsails/lspkind.nvim" },
     },
@@ -50,6 +51,29 @@ return {
         ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
         ['<Cr>'] = cmp.mapping.confirm({ select = true }),
         ['<C-Space>'] = cmp.mapping.complete(),
+      })
+
+      -- / cmdline setup
+      cmp.setup.cmdline('/', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = 'buffer' }
+        }
+      })
+
+      -- : cmdline setup
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = 'path' }
+        }, {
+          {
+            name = 'cmdline',
+            option = {
+              ignore_cmds = { 'Man', '!' }
+            }
+          }
+        })
       })
 
       local sources = lsp.defaults.cmp_sources()
