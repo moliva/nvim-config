@@ -27,14 +27,19 @@ return {
       require("nvim-autopairs").setup {}
     end
   },
-  -- use('tpope/vim-repeat')
-
-  -- git utils
   {
-    'mbbill/undotree',
-    keys = {
-      { "<leader>u", vim.cmd.UndotreeToggle }
-    }
+    'mg979/vim-visual-multi',
+    branch = 'master',
+    lazy = false,
+    config = function()
+      vim.api.nvim_exec(
+        [[
+let g:VM_maps = {}
+let g:VM_maps["Add Cursor Down"]             = '<C-j>'
+let g:VM_maps["Add Cursor Up"]               = '<C-k>'
+]],
+        false)
+    end
   },
   {
     'kevinhwang91/nvim-ufo',
@@ -63,6 +68,16 @@ return {
         end
       })
     end
+  },
+
+  -- use('tpope/vim-repeat')
+
+  -- git utils
+  {
+    'mbbill/undotree',
+    keys = {
+      { "<leader>u", vim.cmd.UndotreeToggle }
+    }
   },
 
   -- lua
