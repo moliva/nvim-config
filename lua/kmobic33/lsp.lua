@@ -12,6 +12,7 @@ function M.get_capabilities()
   return capabilities
 end
 
+---@diagnostic disable-next-line: unused-local
 function M.on_attach(_client, bufnr)
   local opts = { buffer = bufnr, remap = false }
 
@@ -46,7 +47,8 @@ function M.on_attach(_client, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts)
 
-  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
+  -- TODO - table extend below for the opts + { desc } - moliva - 2024/02/06
+  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format" })
   -- vim.keymap.set("n", "<leader>f", function()
   --   vim.lsp.buf.format({ async = true })
   -- end, opts)

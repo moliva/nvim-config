@@ -32,6 +32,21 @@ function M.configure_snippets(ls)
   -- cleans up all snippets (useful when reloading this file)
   ls.cleanup()
 
+  ls.add_snippets("lua", {
+    s("module",
+      fmt(
+        [[
+        local M = {{}}
+
+        {}
+
+        return M
+   ]],
+        {
+          i(0)
+        }))
+  })
+
   ls.add_snippets("all", {
     parse("separator",
       "$LINE_COMMENT *****************************************************************************************************\n$LINE_COMMENT *************** ${1:separator} ***************\n$LINE_COMMENT *****************************************************************************************************\n"),

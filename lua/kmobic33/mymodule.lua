@@ -1,7 +1,7 @@
 
 M = {}
 
-M.setup = function(opts)
+function M.setup(opts)
   -- setup function is a convention for plugins in lua neovim
 end
 

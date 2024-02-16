@@ -20,7 +20,7 @@ return {
       { 'hrsh7th/cmp-buffer' }, { 'hrsh7th/cmp-path' }, { 'saadparwaiz1/cmp_luasnip' },
       { 'hrsh7th/cmp-nvim-lua' }, -- Snippets
       { 'hrsh7th/cmp-cmdline' },
-      { 'L3MON4D3/LuaSnip' }, { 'rafamadriz/friendly-snippets' },
+      { 'L3MON4D3/LuaSnip',    version = "v2.*" }, { 'rafamadriz/friendly-snippets' },
       { "onsails/lspkind.nvim" },
     },
     config = function()
@@ -172,10 +172,8 @@ return {
 
       local capabilities = require("kmobic33.lsp").get_capabilities()
 
-      -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
       local lspconfig = require('lspconfig')
-
 
       lspconfig.csharp_ls.setup({})
 
@@ -188,6 +186,11 @@ return {
         single_file_support = true,
       })
 
+      require("neodev").setup({
+        -- add any options here, or leave empty to use the default settings
+      })
+
+      -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
         settings = {

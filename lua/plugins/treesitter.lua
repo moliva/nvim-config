@@ -23,7 +23,7 @@ return {
         -- A list of parser names, or "all"
         -- TODO - remoing help as it is not found as a language - moliva - 2023/05/14
         -- ensure_installed = { "help", "javascript", "typescript", "c", "lua", "rust", "vim", "toml", "http", "json" },
-        ensure_installed = { "javascript", "typescript", "c", "lua", "rust", "vim", "toml", "http", "json" },
+        ensure_installed = { "javascript", "typescript", "c", "lua", "rust", "vim", "toml", "http", "json", "gitcommit" },
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
         -- Automatically install missing parsers when entering buffer
