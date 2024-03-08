@@ -4,8 +4,9 @@ function M.get_capabilities()
   local cmp_nvim_lsp = require('cmp_nvim_lsp')
   local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+  -- allow lsps to make folding dynamic folding possible
   capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
+    dynamicRegistration = true,
     lineFoldingOnly = true
   }
 
