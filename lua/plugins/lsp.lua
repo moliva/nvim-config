@@ -133,6 +133,11 @@ return {
       },
     },
     config = function()
+      -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+      -- require("neodev").setup({
+      --   -- add any options here, or leave empty to use the default settings
+      -- })
+
       -- XXX - lsp-zero + lspconfig living together to avoid cycle dependencies - moliva - 2023/05/15
       local lsp = require('lsp-zero').preset('recommended')
 
@@ -172,7 +177,6 @@ return {
 
       local capabilities = require("kmobic33.lsp").get_capabilities()
 
-
       local lspconfig = require('lspconfig')
 
       lspconfig.csharp_ls.setup({})
@@ -186,26 +190,28 @@ return {
         single_file_support = true,
       })
 
-      require("neodev").setup({
-        -- add any options here, or leave empty to use the default settings
-      })
-
       -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
         settings = {
           Lua = {
+            runtime = { version = 'LuaJIT' },
             diagnostics = {
               -- Get the language server to recognize the `vim` and other globals
               -- globals = { "vim", "describe", "it", "before_each", "after_each", "packer_plugins" },
             },
-            completion = { callSnippet = "Both" },
+            -- completion = { callSnippet = "Both" },
+            completion = { callSnippet = "Replace" },
             telemetry = { enable = false },
-            -- workspace = {
-            --   -- Make the server aware of Neovim runtime files
-            --   -- library = vim.api.nvim_get_runtime_file("lua", true),
-            --   library = vim.api.nvim_get_runtime_file("", true),
-            -- },
+            workspace = {
+              -- checkThirdParty = false,
+              -- Make the server aware of Neovim runtime files
+              -- library = vim.api.nvim_get_runtime_file("lua", true),
+              library = {
+                "${3rd}/luv/library",
+                unpack(vim.api.nvim_get_runtime_file("", true)),
+              }
+            },
             hint = {
               enable = true,
             },
@@ -245,6 +251,14 @@ return {
         },
       })
 
+      require 'lspconfig'.cssls.setup({})
+
+      require 'lspconfig'.cssmodules_ls.setup({
+        init_options = {
+          camelCase = 'dashes',
+        },
+      })
+
       lspconfig.jsonls.setup({
         capabilities = capabilities,
         init_options = {
@@ -260,6 +274,8 @@ return {
       lsp.skip_server_setup({ 'rust_analyzer' })
 
       lsp.setup()
+
+      require("ufo")
 
       -- LUasnip config
 
@@ -316,8 +332,9 @@ return {
         end
       end)
 
+      -- TODO - review this - moliva - 2024/03/09
       -- shortcut to source my luasnips file again, which will reload muy snippets
-      vim.keymap.set("n", "<leader><leader>s", "<cmd>source /Users/moliva/.config/nvim/after/plugin/luasnip.lua<CR>")
+      -- vim.keymap.set("n", "<leader><leader>s", "<cmd>source /Users/moliva/.config/nvim/after/plugin/luasnip.lua<CR>")
 
       require("kmobic33.snippets").configure_snippets(ls)
     end

@@ -49,7 +49,7 @@ function M.on_attach(_client, bufnr)
   end, opts)
 
   -- TODO - table extend below for the opts + { desc } - moliva - 2024/02/06
-  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format" })
+  -- vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format" })
   -- vim.keymap.set("n", "<leader>f", function()
   --   vim.lsp.buf.format({ async = true })
   -- end, opts)

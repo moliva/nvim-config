@@ -49,8 +49,8 @@ vim.opt.laststatus = 2
 vim.opt.cursorline = false
 
 -- swtich keys - forward and backward
-vim.keymap.set("n", "sk", "xph")
-vim.keymap.set("n", "Sk", "xhPl")
+vim.keymap.set("n", "sk", "xph", { desc = "Swap char with next one" })
+vim.keymap.set("n", "Sk", "xhPl", { desc = "Swap char with next one" })
 
 -- on split, do it to the right and below
 vim.opt.splitbelow = true
@@ -62,7 +62,7 @@ vim.opt.listchars:append({ space = '⋅', trail = '⋅' })
 
 -- ufo and folding
 vim.o.foldcolumn = '1' -- '0' is not bad
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 

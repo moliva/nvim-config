@@ -23,11 +23,23 @@ return {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
     cmd = "Telescope",
+    event = "VeryLazy",
     keys = {
       {
         '<C-p>',
         function() require('telescope.builtin').git_files() end,
         desc = "Look in git files"
+      },
+      {
+        '<leader>pn',
+        function()
+          require('telescope').extensions.smart_open.smart_open {
+            cwd_only = true,
+            filename_first = false,
+            cwd = "/Users/moliva/.config/nvim"
+          }
+        end,
+        desc = "Telescope smart open on nvim dir"
       },
       {
         '<leader>pf',

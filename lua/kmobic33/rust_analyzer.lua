@@ -97,7 +97,8 @@ function M.config(capabilities)
   return {
     capabilities = capabilities,
     cmd = {
-      "rustup", "run", "stable", "rust-analyzer"
+      "rust-analyzer"
+      -- "rustup", "run", "stable", "rust-analyzer"
       -- "ra-multiplex", "--ra-mux-server", "/Users/moliva/.rustup/toolchains/stable-x86_64-apple-darwin/bin/rust-analyzer"
     },
     settings = settings

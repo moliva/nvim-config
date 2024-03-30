@@ -27,6 +27,10 @@ return {
         return current_git_repo
       end
 
+      local function maximize_status()
+        return vim.t.maximized and '   ' or ''
+      end
+
       require('lualine').setup {
         options = {
           icons_enabled        = true,
@@ -54,8 +58,11 @@ return {
             {
               'filename',
               file_status = true, -- displays file status (readonly status, modified status)
-              path = 1            -- 0 = just filename, 1 = relative path, 2 = absolute path
+              path = 1,           -- 0 = just filename, 1 = relative path, 2 = absolute path
             },
+            {
+              maximize_status
+            }
             -- {
             --   'bg_jobs',
             --   on_click = function(clicks, button, modifiers)

@@ -1,8 +1,8 @@
 return {
   -- theme & ui
   {
-    'rose-pine/neovim',
-    name = 'rose-pine',
+    "rose-pine/neovim",
+    name = "rose-pine",
   },
 
   -- issue here!
@@ -17,19 +17,19 @@ return {
 
   -- edit
   {
-    'tpope/vim-surround',
+    "tpope/vim-surround",
     event = { "BufReadPre", "BufNewFile" },
   },
   {
-    'windwp/nvim-autopairs',
+    "windwp/nvim-autopairs",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      require("nvim-autopairs").setup {}
-    end
+      require("nvim-autopairs").setup({})
+    end,
   },
   {
-    'mg979/vim-visual-multi',
-    branch = 'master',
+    "mg979/vim-visual-multi",
+    branch = "master",
     lazy = false,
     config = function()
       vim.api.nvim_exec(
@@ -38,46 +38,58 @@ let g:VM_maps = {}
 let g:VM_maps["Add Cursor Down"]             = '<C-j>'
 let g:VM_maps["Add Cursor Up"]               = '<C-k>'
 ]],
-        false)
-    end
+        false
+      )
+    end,
   },
   {
-    'kevinhwang91/nvim-ufo',
-    dependencies = 'kevinhwang91/promise-async',
-    lazy = true,
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
     keys = {
       --   -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-      { 'zR', function() require('ufo').openAllFolds() end,  desc = "Open all folds" },
-      { 'zM', function() require('ufo').closeAllFolds() end, desc = "Close all folds" },
       {
-        'zK',
+        "zR",
         function()
-          local winid = require('ufo').peekFoldedLinesUnderCursor()
+          require("ufo").openAllFolds()
+        end,
+        desc = "Open all folds",
+      },
+      {
+        "zM",
+        function()
+          require("ufo").closeAllFolds()
+        end,
+        desc = "Close all folds",
+      },
+      {
+        "zK",
+        function()
+          local winid = require("ufo").peekFoldedLinesUnderCursor()
           if not winid then
             vim.lsp.buf.hover()
           end
         end,
-        desc = "Peek fold"
+        desc = "Peek fold",
       },
     },
     config = function()
-      require('lsp-zero')
-      require('ufo').setup({
+      require("lsp-zero")
+      require("ufo").setup({
         provider_selector = function(_, _, _)
-          return { 'lsp', 'indent' }
-        end
+          return { "lsp", "indent" }
+        end,
       })
-    end
+    end,
   },
 
   -- use('tpope/vim-repeat')
 
   -- git utils
   {
-    'mbbill/undotree',
+    "mbbill/undotree",
     keys = {
-      { "<leader>u", vim.cmd.UndotreeToggle }
-    }
+      { "<leader>u", vim.cmd.UndotreeToggle },
+    },
   },
 
   -- lua
@@ -88,9 +100,115 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
   },
   {
     "folke/neodev.nvim",
-    event = { "BufReadPre *.lua" },
+    lazy = true,
+    -- event = { "BufReadPre *.lua" },
+  },
+
+  -- formatting
+  {
+    "stevearc/conform.nvim",
+    keys = {
+      {
+        "<leader>f",
+        function()
+          require("conform").format()
+        end,
+        desc = "Format file",
+      },
+    },
+    config = function()
+      require("conform").setup({
+        format_on_save = {
+          -- I recommend these options. See :help conform.format for details.
+          lsp_fallback = true,
+          timeout_ms = 500,
+        },
+        formatters_by_ft = {
+          lua = { "stylua" },
+          -- Conform will run multiple formatters sequentially
+          python = { "isort", "black" },
+          -- Use a sub-list to run only the first available formatter
+          typescript = { { "prettierd", "prettier" } },
+          typescriptreact = { { "prettierd", "prettier" } },
+          javascript = { { "prettierd", "prettier" } },
+          javascriptreact = { { "prettierd", "prettier" } },
+          json = { { "prettierd", "prettier" } },
+          html = { { "prettierd", "prettier" } },
+          css = { { "prettierd", "prettier" } },
+          go = { "goimports", "gofmt" },
+          toml = { "taplo" },
+          sql = { "pg_format", "sqlfluff" },
+          rust = { "rustfmt" },
+          zig = { "zigfmt" },
+        },
+      })
+    end,
   },
 
   -- typescript
   -- use 'jose-elias-alvarez/typescript.nvim'
+
+  {
+    "declancm/maximize.nvim",
+    keys = {
+      {
+        "<leader>z",
+        function()
+          require("maximize").toggle()
+        end,
+        desc = "maximize buffer",
+      },
+    },
+    config = function()
+      require("maximize").setup()
+    end,
+  },
+
+  {
+    "moliva/private.nvim",
+    dir = "/Users/moliva/repos/private.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = false,
+    config = function()
+      require("private").setup()
+    end,
+    keys = {
+      { "<leader>ir", ":Lazy reload private.nvim<CR>" },
+      {
+        "<leader>iep",
+        function()
+          require("private.predef_actions").encrypt_path()
+        end,
+        desc = "encrypt action",
+      },
+      {
+        "<leader>iec",
+        function()
+          require("private.predef_actions").encrypt_current_file()
+        end,
+        desc = "encrypt current file",
+      },
+      {
+        "<leader>idp",
+        function()
+          require("private.predef_actions").decrypt_path()
+        end,
+        desc = "decrypt action",
+      },
+      {
+        "<leader>idc",
+        function()
+          require("private.predef_actions").decrypt_current_file()
+        end,
+        desc = "decrypt current file",
+      },
+      {
+        "<leader>ic",
+        function()
+          print(vim.inspect(require("private").cache))
+        end,
+        desc = "inspect cache",
+      },
+    },
+  },
 }
