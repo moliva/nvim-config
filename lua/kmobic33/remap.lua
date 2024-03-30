@@ -24,14 +24,13 @@ vim.keymap.set("n", "<A-Q>", "<cmd>1,$bd!<cr>", { desc = "Close all buffers" })
 
 -- greatest remap ever (?
 -- allows you to visual highlight text and paste over without replacing the buffer
-vim.keymap.set("x", "<leader>p", "\"_dP")
+vim.keymap.set("x", "<leader>p", '"_dP')
 
-vim.keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = "Delete into an anonymous buffer" })
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete into an anonymous buffer" })
 
 -- TODO - reimplement this using treesitter instead to be able to copy also derives in rust and annotations in other langs - moliva - 2024/03/11
 -- copy everything between { and } including the lines
 vim.keymap.set("n", "YY", "va{Vy}")
-
 
 -- TODO - remove wrapping () {} [] plus the function name (function call) - moliva - 2024/03/04
 -- eg Some(saraza) -> saraza
@@ -56,9 +55,9 @@ vim.keymap.set("n", "<c-k>", "<c-w>k")
 
 -- next greatest remap ever
 -- yank to the system clipboard!
-vim.keymap.set({ "n", "v" }, "<leader>y", "\"+y")
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
 
-vim.keymap.set("n", "<leader>Y", "\"+Y")
+vim.keymap.set("n", "<leader>Y", '"+Y')
 
 -- control c acts as escape in visual edit mode
 vim.keymap.set("i", "<C-c>", "<Esc>")
@@ -81,7 +80,7 @@ vim.keymap.set("n", "<leader>s", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<leader><leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- save on control s, control q for quitting and control x for quit/saving
-local modes = { 'n', 'i', 'v' }
+local modes = { "n", "i", "v" }
 vim.keymap.set(modes, "<a-S>", "<cmd>w<CR>")
 -- vim.keymap.set(modes, "<C-x>", "<cmd>x<CR>")
 vim.keymap.set(modes, "<C-q>", "<cmd>q<CR>")
@@ -107,15 +106,14 @@ vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>")
 vim.keymap.set({ "n", "i", "v" }, "<a-k>", "<cmd>m .-2<cr>")
 vim.keymap.set({ "n", "i", "v" }, "<a-j>", "<cmd>m .+1<cr>")
 
-vim.keymap.set("n", "<leader>vcd", "<cmd>%s/\\<dbg\\!(\\(.*\\))/\\1/g<cr>",
-  { desc = "Remove all dbg!() statements in the file" })
-
 local function file_exists(name)
   local f = io.open(name, "r")
   if f ~= nil then
     io.close(f)
     return true
-  else return false end
+  else
+    return false
+  end
 end
 
 vim.keymap.set("n", "<leader>vcp", function()
@@ -125,9 +123,28 @@ vim.keymap.set("n", "<leader>vcp", function()
     file = cwd .. "/package.json"
   elseif file_exists(cwd .. "/Cargo.toml") then
     file = cwd .. "/Cargo.toml"
+  elseif file_exists(cwd .. "/go.mod") then
+    file = cwd .. "/go.mod"
   end
 
   if file then
     vim.cmd("e " .. file)
   end
 end, { desc = "Open project description file (e.g. package.json, Cargo.toml)" })
+
+-- rust environment
+local function rust_keymaps()
+  vim.keymap.set(
+    "n",
+    "<leader>vcd",
+    "<cmd>%s/\\<dbg\\!(\\(.*\\))/\\1/g<cr>",
+    { desc = "Remove all dbg!() statements in the file" }
+  )
+end
+rust_keymaps()
+
+-- go environment
+local function go_keymaps()
+  vim.keymap.set("n", "<leader>vct", "<cmd>!go mod tidy<cr>", { desc = "Go mod tidy" })
+end
+go_keymaps()
