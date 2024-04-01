@@ -50,7 +50,7 @@ return {
     })
   ),
   s(
-    "itfn222",
+    "itfn",
     fmt('it{}("{}", {}() => {{\n  {}\n}})', {
       c(1, { t(""), t(".only"), t(".ignore") }),
       i(2, "test name"),
