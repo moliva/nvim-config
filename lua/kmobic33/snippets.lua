@@ -16,7 +16,7 @@ function M.configure_snippets(ls)
 
   local extras = require("luasnip.extras")
   -- local l = extras.lambda
-  -- local rep = extras.rep -- repeats the content of the `number` insert node referenced
+  local rep = extras.rep -- repeats the content of the `number` insert node referenced
   -- local p = extras.partial
   -- local m = extras.match
   -- local n = extras.nonempty
@@ -33,7 +33,8 @@ function M.configure_snippets(ls)
   ls.cleanup()
 
   ls.add_snippets("lua", {
-    s("module",
+    s(
+      "module",
       fmt(
         [[
         local M = {{}}
@@ -43,32 +44,30 @@ function M.configure_snippets(ls)
         return M
    ]],
         {
-          i(0)
-        }))
+          i(0),
+        }
+      )
+    ),
   })
 
   ls.add_snippets("all", {
-    parse("separator",
-      "$LINE_COMMENT *****************************************************************************************************\n$LINE_COMMENT *************** ${1:separator} ***************\n$LINE_COMMENT *****************************************************************************************************\n"),
-    parse("todo",
-      "$LINE_COMMENT ${1|TODO,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"),
+    parse(
+      "separator",
+      "$LINE_COMMENT *****************************************************************************************************\n$LINE_COMMENT *************** ${1:separator} ***************\n$LINE_COMMENT *****************************************************************************************************\n"
+    ),
+    parse(
+      "todo",
+      "$LINE_COMMENT ${1|TODO,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"
+    ),
     -- s("todo1", fmt("{} {} - {} - moliva - {}", { t("//"), c(1, { t("TODO"), t("FIXME"), t("XXX") }), i(2, "description"), f(function()
     --   return
     --       os.date("%Y/%m/%d")
     -- end) })),
   })
 
-  local languages = { "typescript", "typescriptreact" }
-  for _, lang in ipairs(languages) do
-    ls.add_snippets(lang, {
-      parse("log",
-        "console.log('${1:expression}', $1)"),
-    })
-  end
-
-
   ls.add_snippets("rust", {
-    s("modtest",
+    s(
+      "modtest",
       fmt(
         [[
             #[cfg(test)]
@@ -80,9 +79,12 @@ function M.configure_snippets(ls)
    ]],
         {
           c(1, { t("  use super::*;"), t("") }),
-          i(0)
-        })),
-    s("testfn",
+          i(0),
+        }
+      )
+    ),
+    s(
+      "testfn",
       fmt(
         [[
             #[test]
@@ -92,14 +94,18 @@ function M.configure_snippets(ls)
    ]],
         {
           i(1, "name"),
-          i(0)
-        }))
+          i(0),
+        }
+      )
+    ),
   })
 
   ls.add_snippets("text", {
     s("meeting", fmt("**** {} ****\n{}", { i(1, "meeting name"), i(0) })),
-    s("newmeetingsfile", fmt(
-      [[
+    s(
+      "newmeetingsfile",
+      fmt(
+        [[
 
     {}
 
@@ -111,14 +117,22 @@ function M.configure_snippets(ls)
 
 
     EOF
-    ]], { i(0) })),
+    ]],
+        { i(0) }
+      )
+    ),
     parse("today", "$CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"),
-    s("sep", fmt(
-      [[
+    s(
+      "sep",
+      fmt(
+        [[
     ****************************************************************************************************************
     ********************* {} *********************
     ****************************************************************************************************************
-    ]], { i(0) })),
+    ]],
+        { i(0) }
+      )
+    ),
   })
 end
 

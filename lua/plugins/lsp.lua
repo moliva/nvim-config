@@ -1,26 +1,29 @@
 return {
   -- call tree to be used by lsp zero
   {
-    'ldelossa/litee-calltree.nvim',
-    dependencies = 'ldelossa/litee.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
+    "ldelossa/litee-calltree.nvim",
+    dependencies = "ldelossa/litee.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       -- configure the litee.nvim library
-      require('litee.lib').setup({})
+      require("litee.lib").setup({})
       -- configure litee-calltree.nvim
-      require('litee.calltree').setup({})
-    end
+      require("litee.calltree").setup({})
+    end,
   },
 
   -- Autocompletion
   {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
     dependencies = {
-      { 'hrsh7th/cmp-buffer' }, { 'hrsh7th/cmp-path' }, { 'saadparwaiz1/cmp_luasnip' },
-      { 'hrsh7th/cmp-nvim-lua' }, -- Snippets
-      { 'hrsh7th/cmp-cmdline' },
-      { 'L3MON4D3/LuaSnip',    version = "v2.*" }, { 'rafamadriz/friendly-snippets' },
+      { "hrsh7th/cmp-buffer" },
+      { "hrsh7th/cmp-path" },
+      { "saadparwaiz1/cmp_luasnip" },
+      { "hrsh7th/cmp-nvim-lua" }, -- Snippets
+      { "hrsh7th/cmp-cmdline" },
+      { "L3MON4D3/LuaSnip", version = "v2.*" },
+      { "rafamadriz/friendly-snippets" },
       { "onsails/lspkind.nvim" },
     },
     config = function()
@@ -28,9 +31,9 @@ return {
       -- The arguments for .extend() have the same shape as `manage_nvim_cmp`:
       -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#manage_nvim_cmp
 
-      require('lsp-zero.cmp').extend()
+      require("lsp-zero.cmp").extend()
 
-      local lsp = require('lsp-zero')
+      local lsp = require("lsp-zero")
 
       -- -- And you can configure cmp even more, if you want to.
       -- local cmp = require('cmp')
@@ -44,51 +47,53 @@ return {
       --   }
       -- })
 
-      local cmp = require('cmp')
+      local cmp = require("cmp")
       local cmp_select = { behavior = cmp.SelectBehavior.Select }
       local cmp_mappings = lsp.defaults.cmp_mappings({
-        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-        ['<Cr>'] = cmp.mapping.confirm({ select = true }),
-        ['<C-Space>'] = cmp.mapping.complete(),
+        ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+        ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+        ["<Cr>"] = cmp.mapping.confirm({ select = true }),
+        ["<C-Space>"] = cmp.mapping.complete(),
       })
 
       -- / cmdline setup
-      cmp.setup.cmdline('/', {
+      cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
-          { name = 'buffer' }
-        }
+          { name = "buffer" },
+        },
       })
 
       -- : cmdline setup
-      cmp.setup.cmdline(':', {
+      cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
-          { name = 'path' }
+          { name = "path" },
         }, {
           {
-            name = 'cmdline',
+            name = "cmdline",
             option = {
-              ignore_cmds = { 'Man', '!' }
-            }
-          }
-        })
+              ignore_cmds = { "Man", "!" },
+            },
+          },
+        }),
       })
 
       local sources = lsp.defaults.cmp_sources()
 
-      local utils = require('kmobic33.utils')
+      local utils = require("kmobic33.utils")
       local text_sources = utils.copy_table(sources)
 
-      local index = utils.find_index(function(_, v) return v['name'] == 'buffer' end, sources)
+      local index = utils.find_index(function(_, v)
+        return v["name"] == "buffer"
+      end, sources)
 
       if index ~= nil then
-        sources[index] = { name = 'buffer', keyword_length = 5 }
+        sources[index] = { name = "buffer", keyword_length = 5 }
         table.remove(text_sources, index)
       end
 
-      local lspkind = require('lspkind')
+      local lspkind = require("lspkind")
 
       -- lsp.setup_nvim_cmp({
       --   mapping = cmp_mappings,
@@ -111,25 +116,27 @@ return {
         },
       })
 
-      require("cmp").setup.filetype('text', {
-        sources = cmp.config.sources(text_sources)
+      require("cmp").setup.filetype("text", {
+        sources = cmp.config.sources(text_sources),
       })
-    end
+    end,
   },
 
   -- LSP
   {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
-    cmd = { 'LspInfo', 'Mason' },
-    event = { 'BufReadPre', 'BufNewFile' },
+    "VonHeikemen/lsp-zero.nvim",
+    branch = "v2.x",
+    cmd = { "LspInfo", "Mason" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { 'hrsh7th/cmp-nvim-lsp' },
-      { 'williamboman/mason-lspconfig.nvim' },
-      { 'neovim/nvim-lspconfig' },
+      { "hrsh7th/cmp-nvim-lsp" },
+      { "williamboman/mason-lspconfig.nvim" },
+      { "neovim/nvim-lspconfig" },
       {
-        'williamboman/mason.nvim',
-        build = function() pcall(vim.cmd, 'MasonUpdate') end,
+        "williamboman/mason.nvim",
+        build = function()
+          pcall(vim.cmd, "MasonUpdate")
+        end,
       },
     },
     config = function()
@@ -139,7 +146,7 @@ return {
       -- })
 
       -- XXX - lsp-zero + lspconfig living together to avoid cycle dependencies - moliva - 2023/05/15
-      local lsp = require('lsp-zero').preset('recommended')
+      local lsp = require("lsp-zero").preset("recommended")
 
       -- This is where all the LSP shenanigans will live
 
@@ -152,19 +159,19 @@ return {
         severity_sort = true,
         float = {
           focusable = false,
-          style = 'minimal',
-          border = 'rounded',
-          source = 'always',
-          header = '',
-          prefix = '',
+          style = "minimal",
+          border = "rounded",
+          source = "always",
+          header = "",
+          prefix = "",
         },
       })
 
       lsp.ensure_installed({
-        'tsserver',
-        'eslint',
-        'lua_ls',
-        'rust_analyzer',
+        "tsserver",
+        "eslint",
+        "lua_ls",
+        "rust_analyzer",
       })
 
       local on_attach = function(c, b)
@@ -177,7 +184,7 @@ return {
 
       local capabilities = require("kmobic33.lsp").get_capabilities()
 
-      local lspconfig = require('lspconfig')
+      local lspconfig = require("lspconfig")
 
       lspconfig.csharp_ls.setup({})
 
@@ -195,7 +202,7 @@ return {
         capabilities = capabilities,
         settings = {
           Lua = {
-            runtime = { version = 'LuaJIT' },
+            runtime = { version = "LuaJIT" },
             diagnostics = {
               -- Get the language server to recognize the `vim` and other globals
               -- globals = { "vim", "describe", "it", "before_each", "after_each", "packer_plugins" },
@@ -210,20 +217,25 @@ return {
               library = {
                 "${3rd}/luv/library",
                 unpack(vim.api.nvim_get_runtime_file("", true)),
-              }
+              },
             },
             hint = {
               enable = true,
             },
-          }
-        }
+          },
+        },
+      })
+
+      lspconfig.bashls.setup({
+        capabilities = capabilities,
+        filetypes = { "sh", "bash", "zsh" },
       })
 
       lspconfig.tsserver.setup({
         capabilities = capabilities,
         -- need to install previously:
         -- $ npm install -g typescript-language-server typescript
-        -- cmd = { "typescript-language-server", "--stdio" },
+        cmd = { "typescript-language-server", "--stdio" },
         -- disable_formatting = true,
         settings = {
           javascript = {
@@ -251,27 +263,27 @@ return {
         },
       })
 
-      require 'lspconfig'.cssls.setup({})
+      require("lspconfig").cssls.setup({})
 
-      require 'lspconfig'.cssmodules_ls.setup({
+      require("lspconfig").cssmodules_ls.setup({
         init_options = {
-          camelCase = 'dashes',
+          camelCase = "dashes",
         },
       })
 
       lspconfig.jsonls.setup({
         capabilities = capabilities,
         init_options = {
-          provideFormatter = true
+          provideFormatter = true,
         },
         settings = {
           json = {
             format = "enable",
-          }
-        }
+          },
+        },
       })
 
-      lsp.skip_server_setup({ 'rust_analyzer' })
+      lsp.skip_server_setup({ "rust_analyzer" })
 
       lsp.setup()
 
@@ -294,9 +306,9 @@ return {
           [types.choiceNode] = {
             active = {
               virt_text = { { "<- Current Choice", "Error" } },
-            }
-          }
-        }
+            },
+          },
+        },
       })
 
       -- c-k expansion key
@@ -337,6 +349,7 @@ return {
       -- vim.keymap.set("n", "<leader><leader>s", "<cmd>source /Users/moliva/.config/nvim/after/plugin/luasnip.lua<CR>")
 
       require("kmobic33.snippets").configure_snippets(ls)
-    end
-  }
+      require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/kmobic33/snippets" })
+    end,
+  },
 }

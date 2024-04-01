@@ -106,6 +106,8 @@ vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>")
 vim.keymap.set({ "n", "i", "v" }, "<a-k>", "<cmd>m .-2<cr>")
 vim.keymap.set({ "n", "i", "v" }, "<a-j>", "<cmd>m .+1<cr>")
 
+--- @param name string
+--- @return boolean
 local function file_exists(name)
   local f = io.open(name, "r")
   if f ~= nil then
@@ -148,3 +150,13 @@ local function go_keymaps()
   vim.keymap.set("n", "<leader>vct", "<cmd>!go mod tidy<cr>", { desc = "Go mod tidy" })
 end
 go_keymaps()
+
+vim.keymap.set(
+  "n",
+  "<leader><leader>r",
+  -- '<cmd>source $HOME/.config/nvim/lua/kmobic33/snippets.lua<cr><cmd>lua require("kmobic33.snippets").configure_snippets(require("luasnip"))<cr>',
+  function()
+    require("luasnip.loaders.from_lua").load({ paths = "$HOME/.config/nvim/lua/kmobic33/snippets" })
+  end,
+  { desc = "Reload snippets" }
+)
