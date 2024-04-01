@@ -104,6 +104,21 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     -- event = { "BufReadPre *.lua" },
   },
 
+  -- linters
+  {
+    "mfussenegger/nvim-lint",
+    lazy = true,
+    config = function()
+      require("lint").linters_by_ft = {
+        sh = { "shellcheck" },
+        bash = { "shellcheck" },
+        -- lua = { "luacheck" }, -- lua check not working with mason
+        -- lua = { "selene" }, -- not adding lots of value currently
+        json = { "jsonlint" },
+      }
+    end,
+  },
+
   -- formatting
   {
     "stevearc/conform.nvim",
@@ -140,8 +155,17 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
           sql = { "pg_format", "sqlfluff" },
           rust = { "rustfmt" },
           zig = { "zigfmt" },
+          bash = { "shfmt" },
+          zsh = { "shfmt" },
+          sh = { "shfmt" },
         },
       })
+
+      require("conform").formatters.shfmt = {
+        prepend_args = function(self, ctx)
+          return { "-i", "2" }
+        end,
+      }
     end,
   },
 
