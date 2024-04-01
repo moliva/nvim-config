@@ -344,11 +344,6 @@ return {
         end
       end)
 
-      -- TODO - review this - moliva - 2024/03/09
-      -- shortcut to source my luasnips file again, which will reload muy snippets
-      -- vim.keymap.set("n", "<leader><leader>s", "<cmd>source /Users/moliva/.config/nvim/after/plugin/luasnip.lua<CR>")
-
-      require("kmobic33.snippets").configure_snippets(ls)
       require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/kmobic33/snippets" })
     end,
   },

@@ -150,13 +150,3 @@ local function go_keymaps()
   vim.keymap.set("n", "<leader>vct", "<cmd>!go mod tidy<cr>", { desc = "Go mod tidy" })
 end
 go_keymaps()
-
-vim.keymap.set(
-  "n",
-  "<leader><leader>r",
-  -- '<cmd>source $HOME/.config/nvim/lua/kmobic33/snippets.lua<cr><cmd>lua require("kmobic33.snippets").configure_snippets(require("luasnip"))<cr>',
-  function()
-    require("luasnip.loaders.from_lua").load({ paths = "$HOME/.config/nvim/lua/kmobic33/snippets" })
-  end,
-  { desc = "Reload snippets" }
-)

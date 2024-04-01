@@ -29,16 +29,36 @@ local fmt = require("luasnip.extras.fmt").fmt
 local parse = require("luasnip.util.parser").parse_snippet
 
 return {
-  parse(
-    "sep",
-    "$LINE_COMMENT *****************************************************************************************************\n$LINE_COMMENT *************** ${1:separator} ***************\n$LINE_COMMENT *****************************************************************************************************\n"
+  s(
+    "modtest",
+    fmt(
+      [[
+            #[cfg(test)]
+            mod test {{
+            {}
+
+              {}
+            }}
+   ]],
+      {
+        c(1, { t("  use super::*;"), t("") }),
+        i(0),
+      }
+    )
   ),
-  parse(
-    "todo",
-    "$LINE_COMMENT ${1|TODO,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"
+  s(
+    "testfn",
+    fmt(
+      [[
+            #[test]
+            fn test_{}() {{
+              {}
+            }}
+   ]],
+      {
+        i(1, "name"),
+        i(0),
+      }
+    )
   ),
-  -- s("todo1", fmt("{} {} - {} - moliva - {}", { t("//"), c(1, { t("TODO"), t("FIXME"), t("XXX") }), i(2, "description"), f(function()
-  --   return
-  --       os.date("%Y/%m/%d")
-  -- end) })),
 }
