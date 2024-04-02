@@ -192,12 +192,13 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     "moliva/private.nvim",
     dir = "/Users/moliva/repos/private.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    lazy = false,
     config = function()
       require("private").setup()
     end,
     keys = {
+      { "<leader>i", nil, desc = "Private" },
       { "<leader>ir", ":Lazy reload private.nvim<CR>" },
+      { "<leader>ie", nil, desc = "Encrypt" },
       {
         "<leader>iep",
         function()
@@ -212,6 +213,7 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
         end,
         desc = "encrypt current file",
       },
+      { "<leader>id", nil, desc = "Decrypt" },
       {
         "<leader>idp",
         function()
