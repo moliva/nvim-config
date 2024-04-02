@@ -3,6 +3,7 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
+    event = "VeryLazy",
   },
 
   -- issue here!
@@ -30,7 +31,7 @@ return {
   {
     "mg979/vim-visual-multi",
     branch = "master",
-    lazy = false,
+    lazy = true,
     config = function()
       vim.api.nvim_exec(
         [[
@@ -46,7 +47,7 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
     keys = {
-      --   -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+      -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
       {
         "zR",
         function()
@@ -172,6 +173,7 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
   -- typescript
   -- use 'jose-elias-alvarez/typescript.nvim'
 
+  -- maximize windows
   {
     "declancm/maximize.nvim",
     keys = {
@@ -180,7 +182,7 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
         function()
           require("maximize").toggle()
         end,
-        desc = "maximize buffer",
+        desc = "Maximize buffer",
       },
     },
     config = function()
