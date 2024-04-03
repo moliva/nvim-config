@@ -1,11 +1,24 @@
 return {
 
   {
-    'stevearc/oil.nvim',
+    "stevearc/oil.nvim",
     lazy = false,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
-      { "-",          function() require("oil").open() end, desc = "Open parent directory" },
-      { "<leader>pv", function() require("oil").open() end, desc = "Open parent directory" },
+      {
+        "-",
+        function()
+          require("oil").open()
+        end,
+        desc = "Open parent directory",
+      },
+      {
+        "<leader>pv",
+        function()
+          require("oil").open()
+        end,
+        desc = "Open parent directory",
+      },
     },
     config = function()
       vim.g.loaded_netrw = 1
@@ -131,7 +144,5 @@ return {
         },
       })
     end,
-
-    dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 }

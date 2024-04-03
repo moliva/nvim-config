@@ -51,10 +51,11 @@ return {
   ),
   s(
     "itfn",
-    fmt('it{}("{}", {}() => {{\n  {}\n}})', {
-      c(1, { t(""), t(".only"), t(".ignore") }),
-      i(2, "test name"),
-      c(3, { t(""), t("async ") }),
+    fmt('{}{}("{}", {}() => {{\n  {}\n}})', {
+      c(1, { t("it"), t("describe") }),
+      c(2, { t(""), t(".only"), t(".ignore") }),
+      i(3, "test name"),
+      c(4, { t(""), t("async ") }),
       i(0),
     })
   ),
