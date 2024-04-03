@@ -1,13 +1,13 @@
 local M = {}
 
 function M.get_capabilities()
-  local cmp_nvim_lsp = require('cmp_nvim_lsp')
+  local cmp_nvim_lsp = require("cmp_nvim_lsp")
   local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
   -- allow lsps to make folding dynamic folding possible
   capabilities.textDocument.foldingRange = {
     dynamicRegistration = true,
-    lineFoldingOnly = true
+    lineFoldingOnly = true,
   }
 
   return capabilities
@@ -31,7 +31,7 @@ function M.on_attach(_client, bufnr)
   -- vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
   -- vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
 
-  vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
+  vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
 
   -- input a name/filter to look for a symbol in the workspaces
   vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
@@ -42,9 +42,9 @@ function M.on_attach(_client, bufnr)
   vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
 
   -- lsp workspace folders management
-  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
-  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
-  vim.keymap.set('n', '<leader>wl', function()
+  vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+  vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+  vim.keymap.set("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts)
 
@@ -59,7 +59,7 @@ function M.on_attach(_client, bufnr)
       name = "Go to",
       d = { vim.lsp.buf.definition, "Go to definition" },
       y = { vim.lsp.buf.type_definition, "Go to type definition" },
-      i = { vim.lsp.buf.implementation, "Go to implementation" }
+      i = { vim.lsp.buf.implementation, "Go to implementation" },
     },
   })
 
@@ -71,7 +71,7 @@ function M.on_attach(_client, bufnr)
       name = "Vim",
       c = {
         name = "Code",
-        a = { vim.lsp.buf.code_action, "Actions from LSP to the current line" }
+        a = { vim.lsp.buf.code_action, "Actions from LSP to the current line" },
       },
       d = { vim.diagnostic.open_float, "Diagnostics float" },
       -- s = {
@@ -82,15 +82,20 @@ function M.on_attach(_client, bufnr)
       -- show diagnostics at cursor/in project (in fuzzy finder)
       -- vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
       -- vim.keymap.set("n", "<leader>vsd", "<cmd>Telescope diagnostics<cr>", opts)
-      i = { function()
-        vim.lsp.buf.incoming_calls()
-        require('litee.calltree').open_to()
-      end, "Incoming calls" },
+      i = {
+        function()
+          vim.lsp.buf.incoming_calls()
+          require("litee.calltree").open_to()
+        end,
+        "Incoming calls",
+      },
       o = {
         function()
           vim.lsp.buf.outgoing_calls()
-          require('litee.calltree').open_to()
-        end, "Outgoing calls" },
+          require("litee.calltree").open_to()
+        end,
+        "Outgoing calls",
+      },
     },
   }, { prefix = "<leader>", opts })
 end

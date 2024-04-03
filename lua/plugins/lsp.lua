@@ -186,7 +186,30 @@ return {
 
       local lspconfig = require("lspconfig")
 
-      lspconfig.csharp_ls.setup({})
+      lspconfig.csharp_ls.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.docker_compose_language_service.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.dockerls.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.yamlls.setup({
+        capabilities = capabilities,
+        settings = {
+          yaml = {
+            schemas = {
+              kubernetes = "/*.yaml",
+              -- Add the schema for gitlab piplines
+              -- ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = "*.gitlab-ci.yml",
+            },
+          },
+        },
+      })
 
       lspconfig["solidity"].setup({
         capabilities = capabilities,
