@@ -1,13 +1,13 @@
 local ls = require("luasnip")
 
 local s = ls.snippet
--- local sn = ls.snippet_node
+local sn = ls.snippet_node
 -- local isn = ls.indent_snippet_node
 local t = ls.text_node
 local i = ls.insert_node
 -- local f = ls.function_node
 local c = ls.choice_node
--- local d = ls.dynamic_node
+local d = ls.dynamic_node
 -- local r = ls.restore_node
 
 -- local events = require("luasnip.util.events")
@@ -22,21 +22,73 @@ local rep = extras.rep -- repeats the content of the `number` insert node refere
 -- local dl = extras.dynamic_lambda
 
 local fmt = require("luasnip.extras.fmt").fmt
--- local fmta = require("luasnip.extras.fmt").fmta
+local fmta = require("luasnip.extras.fmt").fmta
 -- local conds = require("luasnip.extras.expand_conditions")
 -- local postfix = require("luasnip.extras.postfix").postfix
 -- local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 
+local function iterable_vars()
+  -- TODO - if possible, filter by iterable type - moliva - 2024/04/03
+  local function_node_types = {
+    function_declaration = true,
+    -- method_declaration = true,
+    -- func_literal = true,
+  }
+
+  local node = vim.treesitter.get_node()
+  while node ~= nil do
+    if function_node_types[node:type()] then
+      break
+    end
+
+    node = node:parent()
+  end
+
+  if not node then
+    vim.notify("Not inside of a function")
+
+    return t("")
+  end
+
+  local query = assert(vim.treesitter.query.get("typescript", "vars-in-scope"), "No query")
+
+  local fields = {}
+
+  for id, node, metadata, match in query:iter_captures(node, 0) do
+    local text = vim.treesitter.get_node_text(node, 0)
+
+    -- check if field is already in table, as the query retrieves dups
+    if fields[text] == nil then
+      fields[text] = t(text)
+    end
+  end
+
+  return { c(1, vim.tbl_values(fields)) }
+end
+
+local function iterables(args)
+  return sn(
+    nil, -- position for this node, which can be determined by caller
+    iterable_vars()
+  )
+end
+
 return {
   parse("log", "console.log('${1:expression}', $1)"),
   s(
     "forconst",
-    fmt("for (const {} of {}) {{\n  {}\n}}", {
-      i(1, "i"),
-      i(2, "iterable"),
-      i(0),
-    })
+    fmta(
+      [[for (const <item> of <iterable>) {
+  <finish>
+}]],
+      {
+        item = i(1, "each"),
+        -- iterable = i(2, "iterable"),
+        iterable = d(2, iterables, {}),
+        finish = i(0),
+      }
+    )
   ),
   s(
     "forlet",
