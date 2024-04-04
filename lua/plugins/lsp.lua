@@ -277,6 +277,15 @@ return {
         },
       })
 
+      -- TODO - doesn't seem to work outside of nightly - moliva - 2024/04/04
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        -- Use a sharp border with `FloatBorder` highlights
+        -- border = "single",
+        -- add the title in hover float window
+        -- title = "hover"
+        silent = true,
+      })
+
       -- XXX - working on cssmodules lsp, this creates a race condition - moliva - 2024/04/04
       if false then
         lsp.skip_server_setup({ "tsserver" })

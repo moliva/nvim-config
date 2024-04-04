@@ -150,3 +150,5 @@ local function go_keymaps()
   vim.keymap.set("n", "<leader>vct", "<cmd>!go mod tidy<cr>", { desc = "Go mod tidy" })
 end
 go_keymaps()
+
+vim.keymap.set("n", "<leader>l", "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>", { desc = "Restart LSPs" })
