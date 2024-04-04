@@ -133,24 +133,38 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
       },
     },
     config = function()
-      require("conform").setup({
-        format_on_save = {
-          -- I recommend these options. See :help conform.format for details.
-          lsp_fallback = true,
-          timeout_ms = 500,
-        },
+      local conform = require("conform")
+      conform.setup({
+        -- format_on_save = {
+        --   -- I recommend these options. See :help conform.format for details.
+        --   lsp_fallback = true,
+        --   timeout_ms = 500,
+        -- },
         formatters_by_ft = {
           lua = { "stylua" },
           -- Conform will run multiple formatters sequentially
           python = { "isort", "black" },
           -- Use a sub-list to run only the first available formatter
-          typescript = { { "prettierd", "prettier" } },
-          typescriptreact = { { "prettierd", "prettier" } },
-          javascript = { { "prettierd", "prettier" } },
-          javascriptreact = { { "prettierd", "prettier" } },
-          json = { { "prettierd", "prettier" } },
-          html = { { "prettierd", "prettier" } },
-          css = { { "prettierd", "prettier" } },
+          typescript = function(bufnr)
+            if conform.get_formatter_info("biome", bufnr).available then
+              return { "biome" }
+            else
+              return { "prettier" }
+            end
+          end,
+          typescriptreact = { "prettier" },
+          javascript = { "prettier" },
+          javascriptreact = { "prettier" },
+          json = { "prettier" },
+          html = { "prettier" },
+          css = { "prettier" },
+          -- typescript = { { "prettierd", "prettier" } },
+          -- typescriptreact = { { "prettierd", "prettier" } },
+          -- javascript = { { "prettierd", "prettier" } },
+          -- javascriptreact = { { "prettierd", "prettier" } },
+          -- json = { { "prettierd", "prettier" } },
+          -- html = { { "prettierd", "prettier" } },
+          -- css = { { "prettierd", "prettier" } },
           go = { "goimports", "gofmt" },
           toml = { "taplo" },
           sql = { "pg_format", "sqlfluff" },

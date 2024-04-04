@@ -188,18 +188,22 @@ return {
 
       lspconfig.csharp_ls.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
       })
 
       lspconfig.docker_compose_language_service.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
       })
 
       lspconfig.dockerls.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
       })
 
       lspconfig.yamlls.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
         settings = {
           yaml = {
             schemas = {
@@ -223,6 +227,7 @@ return {
       -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
         settings = {
           Lua = {
             runtime = { version = "LuaJIT" },
@@ -238,8 +243,9 @@ return {
               -- Make the server aware of Neovim runtime files
               -- library = vim.api.nvim_get_runtime_file("lua", true),
               library = {
+                unpack(vim.api.nvim_get_runtime_file("lua", true)),
                 "${3rd}/luv/library",
-                unpack(vim.api.nvim_get_runtime_file("", true)),
+                "${3rd}/busted/library",
               },
             },
             hint = {
@@ -251,47 +257,71 @@ return {
 
       lspconfig.bashls.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
         filetypes = { "sh", "bash", "zsh" },
       })
 
-      lspconfig.tsserver.setup({
+      local home = os.getenv("HOME")
+
+      lspconfig.cssmodules_ls.setup({
+
+        cmd = { "node", home .. "/repos/cssmodules-language-server/lib/cli.js" },
         capabilities = capabilities,
-        -- need to install previously:
-        -- $ npm install -g typescript-language-server typescript
-        cmd = { "typescript-language-server", "--stdio" },
-        -- disable_formatting = true,
-        settings = {
-          javascript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-            },
-          },
-          typescript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-            },
-          },
+        on_attach = on_attach,
+        -- on_attach = function(client, buf)
+        --   client.server_capabilities.definitionProvider = false
+        --   on_attach(client, buf)
+        -- end,
+        init_options = {
+          camelCase = false,
         },
       })
 
-      require("lspconfig").cssls.setup({})
+      -- XXX - working on cssmodules lsp, this creates a race condition - moliva - 2024/04/04
+      if false then
+        lsp.skip_server_setup({ "tsserver" })
+      else
+        lspconfig.tsserver.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+          -- need to install previously:
+          cmd = { "typescript-language-server", "--stdio" },
+          -- disable_formatting = true,
+          settings = {
+            javascript = {
+              inlayHints = {
+                includeInlayEnumMemberValueHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayVariableTypeHints = true,
+              },
+            },
+            typescript = {
+              inlayHints = {
+                includeInlayEnumMemberValueHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayVariableTypeHints = true,
+              },
+            },
+          },
+        })
+      end
 
-      require("lspconfig").cssmodules_ls.setup({
-        init_options = {
-          camelCase = "dashes",
-        },
+      lspconfig.cssls.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      lspconfig.html.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
       })
 
       lspconfig.jsonls.setup({
@@ -305,6 +335,8 @@ return {
           },
         },
       })
+
+      lspconfig.taplo.setup({})
 
       lsp.skip_server_setup({ "rust_analyzer" })
 
