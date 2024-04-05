@@ -215,7 +215,16 @@ return {
         },
       })
 
-      lspconfig["solidity"].setup({
+      -- TODO - doesn't seem to work outside of nightly - moliva - 2024/04/04
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        -- Use a sharp border with `FloatBorder` highlights
+        -- border = "single",
+        -- add the title in hover float window
+        -- title = "hover"
+        silent = true,
+      })
+
+      lspconfig.solidity.setup({
         capabilities = capabilities,
         on_attach = on_attach,
         cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
@@ -275,15 +284,6 @@ return {
         init_options = {
           camelCase = false,
         },
-      })
-
-      -- TODO - doesn't seem to work outside of nightly - moliva - 2024/04/04
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        -- Use a sharp border with `FloatBorder` highlights
-        -- border = "single",
-        -- add the title in hover float window
-        -- title = "hover"
-        silent = true,
       })
 
       -- XXX - working on cssmodules lsp, this creates a race condition - moliva - 2024/04/04
