@@ -32,8 +32,8 @@ local function iterable_vars()
   -- TODO - if possible, filter by iterable type - moliva - 2024/04/03
   local function_node_types = {
     function_declaration = true,
-    -- method_declaration = true,
-    -- func_literal = true,
+    function_expression = true,
+    arrow_function = true,
   }
 
   local node = vim.treesitter.get_node()
@@ -55,22 +55,39 @@ local function iterable_vars()
 
   local fields = {}
 
-  for id, node, metadata, match in query:iter_captures(node, 0) do
-    local text = vim.treesitter.get_node_text(node, 0)
+  local has_choices = false
+  for _, each, _, _ in query:iter_captures(node, 0) do
+    local text = vim.treesitter.get_node_text(each, 0)
 
     -- check if field is already in table, as the query retrieves dups
     if fields[text] == nil then
       fields[text] = t(text)
+      has_choices = true
     end
   end
 
-  return { c(1, vim.tbl_values(fields)) }
+  if has_choices then
+    return { c(1, vim.tbl_values(fields)) }
+  else
+    return i(1, "iterable")
+  end
 end
 
 local function iterables(args)
   return sn(
     nil, -- position for this node, which can be determined by caller
     iterable_vars()
+  )
+end
+
+local function setterName(args)
+  local function setter(name)
+    return t("set" .. name:gsub("^%l", string.upper))
+  end
+
+  return sn(
+    nil, -- position for this node, which can be determined by caller
+    setter(args[1][1])
   )
 end
 
@@ -84,7 +101,6 @@ return {
 }]],
       {
         item = i(1, "each"),
-        -- iterable = i(2, "iterable"),
         iterable = d(2, iterables, {}),
         finish = i(0),
       }
@@ -109,6 +125,17 @@ return {
       i(3, "test name"),
       c(4, { t(""), t("async ") }),
       i(0),
+    })
+  ),
+  s(
+    "signal",
+    fmta("const [<signal>, <setSignal>] = createSignal<type>(<initialValue>)\n<finish>", {
+      signal = i(1, "name"),
+      setSignal = d(2, setterName, { 1 }),
+      -- type = c(3, { t(""), fmt("<{}>", { i(0, "generic") }) }),
+      type = i(3),
+      initialValue = i(4, "initialValue"),
+      finish = i(0),
     })
   ),
 }
