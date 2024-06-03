@@ -47,6 +47,8 @@ return {
       --   }
       -- })
 
+      vim.lsp.inlay_hint.enable()
+
       local cmp = require("cmp")
       local cmp_select = { behavior = cmp.SelectBehavior.Select }
       local cmp_mappings = lsp.defaults.cmp_mappings({
@@ -177,7 +179,7 @@ return {
       local on_attach = function(c, b)
         -- require('lsp_mappings').on_attach(c, b)
         require("kmobic33.lsp").on_attach(c, b)
-        require("inlay-hints").on_attach(c, b)
+        -- require("inlay-hints").on_attach(c, b)
       end
 
       lsp.on_attach(on_attach)

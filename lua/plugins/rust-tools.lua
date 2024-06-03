@@ -3,7 +3,7 @@ return {
     'simrat39/rust-tools.nvim',
     ft = "rust",
     config = function()
-      local ih = require("inlay-hints")
+      -- local ih = require("inlay-hints")
 
       local rt = require('rust-tools')
 
@@ -36,7 +36,7 @@ return {
           -- callback to execute once rust-analyzer is done initializing the workspace
           -- The callback receives one parameter indicating the `health` of the server: "ok" | "warning" | "error"
           on_initialized = function()
-            ih.set_all()
+            -- ih.set_all()
           end,
           -- automatically call RustReloadWorkspace when writing to a Cargo.toml file.
           reload_workspace_from_cargo_toml = true,

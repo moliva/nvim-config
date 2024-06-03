@@ -46,7 +46,7 @@ vim.keymap.set("n", "YY", "va{Vy}")
 -- TODO - open nvim files from anywhere - moliva - 2024/03/20
 -- TODO - select all html/xml elemtn (with children) - moliva - 2024/03/20
 
--- TODO - open cargo (in rust projects) - moliva - 2024/03/20
+-- TODO - go to plugin config - moliva - 2024/04/11
 
 vim.keymap.set("n", "<c-j>", "<c-w>j")
 vim.keymap.set("n", "<c-k>", "<c-w>k")
@@ -134,6 +134,70 @@ vim.keymap.set("n", "<leader>vcp", function()
   end
 end, { desc = "Open project description file (e.g. package.json, Cargo.toml)" })
 
+local function visual_select_context()
+  local function_node_types = {
+    function_item = true,
+  }
+
+  local node = vim.treesitter.get_node()
+  while node ~= nil do
+    if function_node_types[node:type()] then
+      break
+    end
+
+    node = node:parent()
+  end
+
+  if not node then
+    vim.notify("Not inside of a function")
+
+    return
+  end
+
+  local row, column, _ = node:start()
+  vim.api.nvim_win_set_cursor(0, { row + 1, column })
+
+  row, column, _ = node:end_()
+
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column .. "lo", true, false, true),
+    "x",
+    true
+  )
+end
+
+local function go_to_current_declaration()
+  local function_node_types = {
+    -- TODO - make it work for rust for now, then ts - moliva - 2024/06/02
+    -- function_declaration = true,
+    -- function_expression = true,
+    -- arrow_function = true,
+    function_item = true,
+  }
+
+  local node = vim.treesitter.get_node()
+  while node ~= nil do
+    if function_node_types[node:type()] then
+      break
+    end
+
+    node = node:parent()
+  end
+
+  if not node then
+    vim.notify("Not inside of a function")
+
+    return
+  end
+
+  local query = assert(vim.treesitter.query.get("rust", "function-name"), "No query")
+  local iter = query:iter_captures(node, 0)
+  local _, each, _ = iter()
+  local row, column, _ = each:start()
+
+  vim.api.nvim_win_set_cursor(0, { row + 1, column })
+end
+
 -- rust environment
 local function rust_keymaps()
   vim.keymap.set(
@@ -142,6 +206,8 @@ local function rust_keymaps()
     "<cmd>%s/\\<dbg\\!(\\(.*\\))/\\1/g<cr>",
     { desc = "Remove all dbg!() statements in the file" }
   )
+  vim.keymap.set("n", "ga", go_to_current_declaration, { desc = "Go to current function signature/definition" })
+  vim.keymap.set("n", "vc", visual_select_context, { desc = "Visually select the current context" })
 end
 rust_keymaps()
 
@@ -151,4 +217,9 @@ local function go_keymaps()
 end
 go_keymaps()
 
-vim.keymap.set("n", "<leader>l", "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>", { desc = "Restart LSPs" })
+vim.keymap.set(
+  "n",
+  "<leader>l",
+  "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>",
+  { desc = "Restart LSPs" }
+)
