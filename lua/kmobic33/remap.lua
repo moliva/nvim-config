@@ -156,6 +156,17 @@ local function find_context_node()
   )
 ]
         ]],
+        -- TODO - rethink this , add a way to use "high level" contexts only (e.g. functions) - moliva - 2024/06/04
+        table_constructor = [[
+        [
+          (table_constructor _ @context)
+        ]
+        ]],
+        function_definition = [[
+[
+  (function_definition _ @context)
+]
+]],
       },
     },
     typescript = {
@@ -216,7 +227,6 @@ local function visual_select_context()
   vim.api.nvim_win_set_cursor(0, { row + 1, column })
 
   row, column, _ = node:end_()
-  vim.print(column)
 
   local column_cmd
   if column == 0 or column == 1 then
