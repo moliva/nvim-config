@@ -134,14 +134,63 @@ vim.keymap.set("n", "<leader>vcp", function()
   end
 end, { desc = "Open project description file (e.g. package.json, Cargo.toml)" })
 
-local function visual_select_context()
-  local function_node_types = {
-    function_item = true,
+local function find_context_node()
+  local langs = {
+    rust = {
+      nodes = {
+        function_item = [[
+[
+  (function_item
+     name: (_) @identifier
+  )
+]
+        ]],
+      },
+    },
+    lua = {
+      nodes = {
+        function_declaration = [[
+[
+  (function_declaration
+     name: (_) @identifier
+  )
+]
+        ]],
+      },
+    },
+    typescript = {
+      nodes = {
+        function_declaration = [[
+[
+  (function_declaration name: (_) @identifier)
+]
+        ]],
+        function_expression = [[
+[
+  (function_expression name: (_) @identifier)
+]
+ ]],
+        arrow_function = [[
+[
+  (arrow_function name: (_) @identifier)
+]
+        ]],
+      },
+    },
   }
 
+  local file_type = vim.treesitter.get_parser():lang()
+  local lang = langs[file_type]
+  if not lang then
+    vim.notify("Not supported language '" .. file_type .. "'")
+    return
+  end
+
   local node = vim.treesitter.get_node()
+  local kind = nil
   while node ~= nil do
-    if function_node_types[node:type()] then
+    kind = lang.nodes[node:type()]
+    if kind ~= nil then
       break
     end
 
@@ -149,8 +198,17 @@ local function visual_select_context()
   end
 
   if not node then
-    vim.notify("Not inside of a function")
+    vim.notify("Not inside a known context")
 
+    return
+  end
+
+  return node, file_type, kind
+end
+
+local function visual_select_context()
+  local node = find_context_node()
+  if not node then
     return
   end
 
@@ -167,36 +225,22 @@ local function visual_select_context()
 end
 
 local function go_to_current_declaration()
-  local function_node_types = {
-    -- TODO - make it work for rust for now, then ts - moliva - 2024/06/02
-    -- function_declaration = true,
-    -- function_expression = true,
-    -- arrow_function = true,
-    function_item = true,
-  }
-
-  local node = vim.treesitter.get_node()
-  while node ~= nil do
-    if function_node_types[node:type()] then
-      break
-    end
-
-    node = node:parent()
-  end
-
+  local node, lang, kind = find_context_node()
   if not node then
-    vim.notify("Not inside of a function")
-
     return
   end
 
-  local query = assert(vim.treesitter.query.get("rust", "function-name"), "No query")
+  local query = vim.treesitter.query.parse(lang, kind)
   local iter = query:iter_captures(node, 0)
   local _, each, _ = iter()
   local row, column, _ = each:start()
 
   vim.api.nvim_win_set_cursor(0, { row + 1, column })
 end
+
+-- multi lang enviroment
+vim.keymap.set("n", "ga", go_to_current_declaration, { desc = "Go to current function signature/definition" })
+vim.keymap.set("n", "vc", visual_select_context, { desc = "Visually select the current context" })
 
 -- rust environment
 local function rust_keymaps()
@@ -206,8 +250,6 @@ local function rust_keymaps()
     "<cmd>%s/\\<dbg\\!(\\(.*\\))/\\1/g<cr>",
     { desc = "Remove all dbg!() statements in the file" }
   )
-  vim.keymap.set("n", "ga", go_to_current_declaration, { desc = "Go to current function signature/definition" })
-  vim.keymap.set("n", "vc", visual_select_context, { desc = "Visually select the current context" })
 end
 rust_keymaps()
 
@@ -222,4 +264,11 @@ vim.keymap.set(
   "<leader>l",
   "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>",
   { desc = "Restart LSPs" }
+)
+
+vim.keymap.set(
+  "n",
+  "<leader>vs",
+  "<cmd>source %<cr><cmd>lua vim.print('Reloaded '.. vim.fn.expand('%'))<cr>",
+  { desc = "Source the current file" }
 )
