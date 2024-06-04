@@ -172,7 +172,7 @@ local function find_context_node()
  ]],
         arrow_function = [[
 [
-  (arrow_function name: (_) @identifier)
+  (arrow_function _ @identifier)
 ]
         ]],
       },
@@ -216,9 +216,17 @@ local function visual_select_context()
   vim.api.nvim_win_set_cursor(0, { row + 1, column })
 
   row, column, _ = node:end_()
+  vim.print(column)
+
+  local column_cmd
+  if column == 0 or column == 1 then
+    column_cmd = "0"
+  else
+    column_cmd = "0" .. column - 1 .. "l"
+  end
 
   vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column .. "lo", true, false, true),
+    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column_cmd .. "o", true, false, true),
     "x",
     true
   )
