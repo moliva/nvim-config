@@ -118,7 +118,7 @@ local function file_exists(name)
   end
 end
 
-vim.keymap.set("n", "<leader>vcp", function()
+vim.keymap.set("n", "gp", function()
   local cwd = vim.fn.getcwd()
   local file
   if file_exists(cwd .. "/package.json") then
@@ -127,6 +127,8 @@ vim.keymap.set("n", "<leader>vcp", function()
     file = cwd .. "/Cargo.toml"
   elseif file_exists(cwd .. "/go.mod") then
     file = cwd .. "/go.mod"
+  elseif file_exists(cwd .. "/pom.xml") then
+    file = cwd .. "/pom.xml"
   end
 
   if file then
@@ -136,6 +138,36 @@ end, { desc = "Open project description file (e.g. package.json, Cargo.toml)" })
 
 local function find_context_node()
   local langs = {
+    java = {
+      nodes = {
+        interface_declaration = [[
+[
+  (interface_declaration
+     name: (_) @identifier
+  )
+]
+        ]],
+        lambda_expression = [[
+[
+  (lambda_expression _ @context)
+]
+        ]],
+        class_declaration = [[
+[
+  (class_declaration
+     name: (_) @identifier
+  )
+]
+        ]],
+        method_declaration = [[
+[
+  (method_declaration
+     name: (_) @identifier
+  )
+]
+        ]],
+      },
+    },
     rust = {
       nodes = {
         function_item = [[

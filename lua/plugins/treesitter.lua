@@ -17,9 +17,9 @@ return {
       require('nvim-ts-autotag')
 
       require('nvim-treesitter.configs').setup({
-        autotag = {
-          enable = true,
-        },
+        -- autotag = {
+        --   enable = true,
+        -- },
         -- A list of parser names, or "all"
         -- TODO - remoing help as it is not found as a language - moliva - 2023/05/14
         -- ensure_installed = { "help", "javascript", "typescript", "c", "lua", "rust", "vim", "toml", "http", "json" },

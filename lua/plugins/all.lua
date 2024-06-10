@@ -99,10 +99,32 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     build = "cargo install stylua",
     event = { "BufReadPre *.lua" },
   },
+  -- {
+  --   "folke/neodev.nvim",
+  --   lazy = true,
+  --   -- event = { "BufReadPre *.lua" },
+  -- },
   {
-    "folke/neodev.nvim",
-    lazy = true,
-    -- event = { "BufReadPre *.lua" },
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  { -- optional completion source for require statements and module annotations
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
+    end,
   },
 
   -- linters
@@ -146,11 +168,11 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
           python = { "isort", "black" },
           -- Use a sub-list to run only the first available formatter
           typescript = function(bufnr)
-            if conform.get_formatter_info("biome", bufnr).available then
-              return { "biome" }
-            else
-              return { "prettier" }
-            end
+            -- if conform.get_formatter_info("biome", bufnr).available then
+            --   return { "biome" }
+            -- else
+            return { "prettier" }
+            -- end
           end,
           typescriptreact = { "prettier" },
           javascript = { "prettier" },
@@ -173,6 +195,8 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
           bash = { "shfmt" },
           zsh = { "shfmt" },
           sh = { "shfmt" },
+          xml = { "xmlformat" },
+          java = { "clang-format" },
         },
       })
 
@@ -206,7 +230,7 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
 
   {
     "moliva/private.nvim",
-    dir = "/Users/moliva/repos/private.nvim",
+    -- dir = "/Users/moliva/repos/private.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("private").setup()
@@ -262,4 +286,28 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
       vim.fn["mkdp#util#install"]()
     end,
   },
+
+  -- java
+  -- {
+  --   "nvim-java/nvim-java",
+  --   dependencies = {
+  --     "nvim-java/lua-async-await",
+  --     "nvim-java/nvim-java-refactor",
+  --     "nvim-java/nvim-java-core",
+  --     "nvim-java/nvim-java-test",
+  --     "nvim-java/nvim-java-dap",
+  --     "MunifTanjim/nui.nvim",
+  --     "neovim/nvim-lspconfig",
+  --     "mfussenegger/nvim-dap",
+  --     {
+  --       "williamboman/mason.nvim",
+  --       opts = {
+  --         registries = {
+  --           "github:nvim-java/mason-registry",
+  --           "github:mason-org/mason-registry",
+  --         },
+  --       },
+  --    },
+  -- },
+  -- },
 }
