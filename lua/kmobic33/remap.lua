@@ -118,7 +118,65 @@ local function file_exists(name)
   end
 end
 
-vim.keymap.set("n", "gp", function()
+vim.keymap.set("n", "gr", function()
+  local cwd = vim.fn.getcwd()
+  local file
+  if file_exists(cwd .. "/README.md") then
+    file = cwd .. "README.md"
+  end
+
+  if file then
+    vim.cmd("e " .. file)
+  end
+end, { desc = "Go to README" })
+
+--- @param path string
+function parent_dir(path)
+  local index = string.find(path, "/[^/]*$")
+  return string.sub(path, 0, index - 1)
+end
+
+vim.keymap.set(
+  "n",
+  "gp",
+  function()
+    local file_path = vim.fn.expand("%")
+
+    local base_path = parent_dir(file_path)
+    if not string.match(base_path, "^.?/") then
+      base_path = "./" .. base_path
+    end
+
+    local file
+
+    while file == nil do
+      if file_exists(base_path .. "/package.json") then
+        file = base_path .. "/package.json"
+      elseif file_exists(base_path .. "/Cargo.toml") then
+        file = base_path .. "/Cargo.toml"
+      elseif file_exists(base_path .. "/go.mod") then
+        file = base_path .. "/go.mod"
+      elseif file_exists(base_path .. "/pom.xml") then
+        file = base_path .. "/pom.xml"
+      end
+
+      if file == file_path then
+        file = nil
+      end
+
+      if file == nil then
+        base_path = parent_dir(base_path)
+      end
+    end
+
+    if file then
+      vim.cmd("e " .. file)
+    end
+  end,
+  { desc = "Looks up for the project description file (e.g. package.json, Cargo.toml) from the current path upwards" }
+)
+
+vim.keymap.set("n", "gP", function()
   local cwd = vim.fn.getcwd()
   local file
   if file_exists(cwd .. "/package.json") then
@@ -134,12 +192,33 @@ vim.keymap.set("n", "gp", function()
   if file then
     vim.cmd("e " .. file)
   end
-end, { desc = "Open project description file (e.g. package.json, Cargo.toml)" })
+end, { desc = "Open project description file at cwd (e.g. package.json, Cargo.toml)" })
 
-local function find_context_node()
+local function find_context_node(node)
   local langs = {
+    json = {
+      nodes = {
+        object = [[
+[
+  (object _ @context)
+]
+        ]],
+        document = [[
+[
+  (document _ @context)
+]
+        ]],
+      },
+    },
     java = {
       nodes = {
+        constructor_declaration = [[
+[
+  (constructor_declaration
+     name: (_) @identifier
+  )
+]
+        ]],
         interface_declaration = [[
 [
   (interface_declaration
@@ -170,6 +249,38 @@ local function find_context_node()
     },
     rust = {
       nodes = {
+        mod_item = [[
+[
+  (mod_item
+  )
+     _ @context
+]
+        ]],
+        macro_invocation = [[
+[
+  (macro_invocation _ @context
+  )
+]
+        ]],
+        macro_definition = [[
+[
+  (macro_definition
+     name: (_) @identifier
+  )
+]
+        ]],
+        block = [[
+[
+  (block _ @context)
+]
+        ]],
+        impl_item = [[
+[
+  (impl_item
+     type: (_) @identifier
+  )
+]
+        ]],
         function_item = [[
 [
   (function_item
@@ -229,7 +340,6 @@ local function find_context_node()
     return
   end
 
-  local node = vim.treesitter.get_node()
   local kind = nil
   while node ~= nil do
     kind = lang.nodes[node:type()]
@@ -250,7 +360,8 @@ local function find_context_node()
 end
 
 local function visual_select_context()
-  local node = find_context_node()
+  local start = vim.treesitter.get_node()
+  local node = find_context_node(start)
   if not node then
     return
   end
@@ -275,7 +386,8 @@ local function visual_select_context()
 end
 
 local function go_to_current_declaration()
-  local node, lang, kind = find_context_node()
+  local start = vim.treesitter.get_node():parent()
+  local node, lang, kind = find_context_node(start)
   if not node then
     return
   end
@@ -300,6 +412,8 @@ local function rust_keymaps()
     "<cmd>%s/\\<dbg\\!(\\(.*\\))/\\1/g<cr>",
     { desc = "Remove all dbg!() statements in the file" }
   )
+
+  vim.keymap.set("n", "<leader>vcl", "<cmd>!just lint<cr>", { desc = "Run just lint" })
 end
 rust_keymaps()
 
@@ -322,3 +436,7 @@ vim.keymap.set(
   "<cmd>source %<cr><cmd>lua vim.print('Reloaded '.. vim.fn.expand('%'))<cr>",
   { desc = "Source the current file" }
 )
+
+vim.keymap.set("n", "<leader>gu", "<cmd>!gpull<cr>", { desc = "Git pull" })
+-- vim.keymap.set("n", "<leader>gq", "<cmd>Git checkout <cr>", { desc = "Git pull" })
+-- vim.fn.input("Grep > ")

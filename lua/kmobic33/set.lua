@@ -66,3 +66,7 @@ vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to de
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
+-- set as keyword, to be used for word wrapping
+vim.opt.iskeyword:append("-")
+vim.opt.iskeyword:append("_")
+

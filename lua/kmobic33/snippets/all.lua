@@ -37,6 +37,10 @@ return {
     "todo",
     "$LINE_COMMENT ${1|TODO,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"
   ),
+  parse(
+    "btodo",
+    "$LINE_COMMENT ${1|TODO,NOTE,FIXME,XXX|}(miguel): ${2:description} - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"
+  ),
   -- s("todo1", fmt("{} {} - {} - moliva - {}", { t("//"), c(1, { t("TODO"), t("FIXME"), t("XXX") }), i(2, "description"), f(function()
   --   return
   --       os.date("%Y/%m/%d")

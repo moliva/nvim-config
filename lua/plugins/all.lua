@@ -99,33 +99,6 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     build = "cargo install stylua",
     event = { "BufReadPre *.lua" },
   },
-  -- {
-  --   "folke/neodev.nvim",
-  --   lazy = true,
-  --   -- event = { "BufReadPre *.lua" },
-  -- },
-  {
-    "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
-    opts = {
-      library = {
-        -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "luvit-meta/library", words = { "vim%.uv" } },
-      },
-    },
-  },
-  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
-  { -- optional completion source for require statements and module annotations
-    "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      opts.sources = opts.sources or {}
-      table.insert(opts.sources, {
-        name = "lazydev",
-        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-      })
-    end,
-  },
 
   -- linters
   {
@@ -287,27 +260,87 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     end,
   },
 
-  -- java
-  -- {
-  --   "nvim-java/nvim-java",
-  --   dependencies = {
-  --     "nvim-java/lua-async-await",
-  --     "nvim-java/nvim-java-refactor",
-  --     "nvim-java/nvim-java-core",
-  --     "nvim-java/nvim-java-test",
-  --     "nvim-java/nvim-java-dap",
-  --     "MunifTanjim/nui.nvim",
-  --     "neovim/nvim-lspconfig",
-  --     "mfussenegger/nvim-dap",
-  --     {
-  --       "williamboman/mason.nvim",
-  --       opts = {
-  --         registries = {
-  --           "github:nvim-java/mason-registry",
-  --           "github:mason-org/mason-registry",
-  --         },
-  --       },
-  --    },
-  -- },
-  -- },
+  {
+    "filipdutescu/renamer.nvim",
+    branch = "master",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+    },
+    config = function()
+      local mappings_utils = require("renamer.mappings.utils")
+
+      require("renamer").setup({
+        -- The popup title, shown if `border` is true
+        title = "Rename",
+        -- The padding around the popup content
+        padding = {
+          top = 0,
+          left = 0,
+          bottom = 0,
+          right = 0,
+        },
+        -- The minimum width of the popup
+        min_width = 15,
+        -- The maximum width of the popup
+        max_width = 100,
+        -- Whether or not to shown a border around the popup
+        border = true,
+        -- The characters which make up the border
+        border_chars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        -- Whether or not to highlight the current word references through LSP
+        show_refs = true,
+        -- Whether or not to add resulting changes to the quickfix list
+        with_qf_list = true,
+        -- Whether or not to enter the new name through the UI or Neovim's `input`
+        -- prompt
+        with_popup = true,
+        -- The keymaps available while in the `renamer` buffer. The example below
+        -- overrides the default values, but you can add others as well.
+        mappings = {
+          ["<c-i>"] = mappings_utils.set_cursor_to_start,
+          ["<c-a>"] = mappings_utils.set_cursor_to_end,
+          ["<c-e>"] = mappings_utils.set_cursor_to_word_end,
+          ["<c-b>"] = mappings_utils.set_cursor_to_word_start,
+
+          ["<c-c>"] = mappings_utils.clear_line,
+
+          ["<esc>"] = function()
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, false, true), "n", true)
+          end,
+
+          ["<c-u>"] = mappings_utils.undo,
+          ["<c-r>"] = mappings_utils.redo,
+        },
+        -- Custom handler to be run after successfully renaming the word. Receives
+        -- the LSP 'textDocument/rename' raw response as its parameter.
+        handler = nil,
+      })
+    end,
+  },
+
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+        filetypes = {
+          javascript = true, -- allow specific filetype
+          typescript = true, -- allow specific filetype
+          rust = true, -- allow specific filetype
+          lua = true, -- allow specific filetype
+          test = false,
+          ["*"] = false, -- disable for all other filetypes and ignore default `filetypes`
+        },
+      })
+    end,
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
+    end,
+  },
 }

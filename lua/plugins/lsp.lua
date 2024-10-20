@@ -1,14 +1,62 @@
 return {
+  -- {
+  --   "folke/neodev.nvim",
+  --   lazy = true,
+  --   -- event = { "BufReadPre *.lua" },
+  -- },
+
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+    enabled = function(root_dir)
+      return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
+    end,
+  },
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  { -- optional completion source for require statements and module annotations
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
+    end,
+  },
+
   -- call tree to be used by lsp zero
+  {
+    "ldelossa/litee.nvim",
+    event = "VeryLazy",
+    opts = {
+      notify = { enabled = false },
+      panel = {
+        orientation = "bottom",
+        panel_size = 10,
+      },
+    },
+    config = function(_, opts)
+      require("litee.lib").setup(opts)
+    end,
+  },
+
   {
     "ldelossa/litee-calltree.nvim",
     dependencies = "ldelossa/litee.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      -- configure the litee.nvim library
-      require("litee.lib").setup({})
-      -- configure litee-calltree.nvim
-      require("litee.calltree").setup({})
+    event = "VeryLazy",
+    opts = {
+      on_open = "panel",
+      map_resize_keys = false,
+    },
+    config = function(_, opts)
+      require("litee.calltree").setup(opts)
     end,
   },
 
@@ -82,6 +130,7 @@ return {
       })
 
       local sources = lsp.defaults.cmp_sources()
+      table.insert(sources, { name = "copilot", group_index = 2 })
 
       local utils = require("kmobic33.utils")
       local text_sources = utils.copy_table(sources)
@@ -242,8 +291,8 @@ return {
       -- })
 
       lspconfig.jdtls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
+        --   capabilities = capabilities,
+        --   on_attach = on_attach,
       })
 
       local lua_rtp = vim.split(package.path, ";")
@@ -293,19 +342,19 @@ return {
 
       local home = os.getenv("HOME")
 
-      lspconfig.cssmodules_ls.setup({
-
-        cmd = { "node", home .. "/repos/cssmodules-language-server/lib/cli.js" },
-        capabilities = capabilities,
-        on_attach = on_attach,
-        -- on_attach = function(client, buf)
-        --   client.server_capabilities.definitionProvider = false
-        --   on_attach(client, buf)
-        -- end,
-        init_options = {
-          camelCase = false,
-        },
-      })
+      -- lspconfig.cssmodules_ls.setup({
+      --
+      --   cmd = { "node", home .. "/repos/cssmodules-language-server/lib/cli.js" },
+      --   capabilities = capabilities,
+      --   on_attach = on_attach,
+      --   -- on_attach = function(client, buf)
+      --   --   client.server_capabilities.definitionProvider = false
+      --   --   on_attach(client, buf)
+      --   -- end,
+      --   init_options = {
+      --     camelCase = false,
+      --   },
+      -- })
 
       -- XXX - working on cssmodules lsp, this creates a race condition - moliva - 2024/04/04
       if false then
@@ -350,6 +399,11 @@ return {
       })
 
       lspconfig.html.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      lspconfig.pyright.setup({
         capabilities = capabilities,
         on_attach = on_attach,
       })
@@ -432,4 +486,29 @@ return {
       require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/kmobic33/snippets" })
     end,
   },
+
+  -- java
+  -- enabling this plugin fs up all other lsps
+  -- {
+  --   "nvim-java/nvim-java",
+  --   dependencies = {
+  --     "nvim-java/lua-async-await",
+  --     "nvim-java/nvim-java-refactor",
+  --     "nvim-java/nvim-java-core",
+  --     "nvim-java/nvim-java-test",
+  --     "nvim-java/nvim-java-dap",
+  --     "MunifTanjim/nui.nvim",
+  --     "neovim/nvim-lspconfig",
+  --     "mfussenegger/nvim-dap",
+  --     {
+  --       "williamboman/mason.nvim",
+  --       opts = {
+  --         registries = {
+  --           "github:nvim-java/mason-registry",
+  --           "github:mason-org/mason-registry",
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 }

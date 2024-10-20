@@ -38,8 +38,10 @@ function M.on_attach(_client, bufnr)
   -- vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
   -- vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
   vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
-  vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
-  vim.keymap.set("n", "<leader>vrr", "<cmd>Telescope lsp_references<cr>", opts)
+  -- vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
+  vim.keymap.set("n", "<leader>vrn", function()
+    require("renamer").rename()
+  end, opts)
 
   -- lsp workspace folders management
   vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
