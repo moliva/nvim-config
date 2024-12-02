@@ -314,6 +314,11 @@ local function find_context_node(node)
     },
     typescript = {
       nodes = {
+        method_definition = [[
+[
+  (method_definition name: (_) @identifier)
+]
+        ]],
         function_declaration = [[
 [
   (function_declaration name: (_) @identifier)
