@@ -317,30 +317,4 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
       })
     end,
   },
-
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-        filetypes = {
-          javascript = true, -- allow specific filetype
-          typescript = true, -- allow specific filetype
-          rust = true, -- allow specific filetype
-          lua = true, -- allow specific filetype
-          test = false,
-          ["*"] = false, -- disable for all other filetypes and ignore default `filetypes`
-        },
-      })
-    end,
-  },
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
-    end,
-  },
 }

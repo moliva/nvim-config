@@ -445,3 +445,7 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>gu", "<cmd>!gpull<cr>", { desc = "Git pull" })
 -- vim.keymap.set("n", "<leader>gq", "<cmd>Git checkout <cr>", { desc = "Git pull" })
 -- vim.fn.input("Grep > ")
+
+vim.keymap.set("n", "<leader><leader>xf", "<cmd>source %<cr>")
+vim.keymap.set("n", "<leader><leader>xs", ":.lua<cr>")
+vim.keymap.set("v", "<leader><leader>xs", ":lua<cr>")
