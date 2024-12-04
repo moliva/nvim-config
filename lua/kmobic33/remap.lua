@@ -312,6 +312,25 @@ local function find_context_node(node)
 ]],
       },
     },
+    tsx = {
+      nodes = {
+        function_declaration = [[
+[
+  (function_declaration name: (_) @identifier)
+]
+        ]],
+        function_expression = [[
+[
+  (function_expression name: (_) @identifier)
+]
+ ]],
+        arrow_function = [[
+[
+  (arrow_function _ @identifier)
+]
+        ]],
+      },
+    },
     typescript = {
       nodes = {
         method_definition = [[
