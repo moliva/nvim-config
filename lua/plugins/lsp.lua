@@ -220,7 +220,7 @@ return {
       })
 
       lsp.ensure_installed({
-        "tsserver",
+        "ts_ls",
         "eslint",
         "lua_ls",
         "rust_analyzer",
@@ -358,9 +358,9 @@ return {
 
       -- XXX - working on cssmodules lsp, this creates a race condition - moliva - 2024/04/04
       if false then
-        lsp.skip_server_setup({ "tsserver" })
+        lsp.skip_server_setup({ "ts_ls" })
       else
-        lspconfig.tsserver.setup({
+        lspconfig.ts_ls.setup({
           capabilities = capabilities,
           on_attach = on_attach,
           -- need to install previously:

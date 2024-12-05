@@ -1,6 +1,6 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
-  "CopilotChat.nvim": { "branch": "main", "commit": "77532363f8180ebd12669f08482182cecf67c8c6" },
+  "CopilotChat.nvim": { "branch": "main", "commit": "caf387f82f6c1c2d0ce26a0104accf08000e4e34" },
   "LuaSnip": { "branch": "master", "commit": "03c8e67eb7293c404845b3982db895d59c0d1538" },
   "barbar.nvim": { "branch": "master", "commit": "5c0abe2331837dcd3830f7429ddb9b8340c9fa93" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
@@ -31,6 +31,7 @@
   "mason-lspconfig.nvim": { "branch": "main", "commit": "8e46de9241d3997927af12196bd8faa0ed08c29a" },
   "mason.nvim": { "branch": "main", "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22" },
   "maximize.nvim": { "branch": "master", "commit": "d688b66344b03ee6e5a32a0a40af85d174490af8" },
+  "mini.nvim": { "branch": "main", "commit": "690a3b4c78c4956f7ecf770124b522d32084b872" },
   "noice.nvim": { "branch": "main", "commit": "c6f6fb178ebe9b4fd90383de743c3399f8c3a37c" },
   "nui.nvim": { "branch": "main", "commit": "b58e2bfda5cea347c9d58b7f11cf3012c7b3953f" },
   "nvim-autopairs": { "branch": "master", "commit": "b464658e9b880f463b9f7e6ccddd93fb0013f559" },
