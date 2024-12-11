@@ -1,29 +1,41 @@
 return {
   {
-    'windwp/nvim-ts-autotag',
+    "windwp/nvim-ts-autotag",
     -- should be triggered by the treesitter autotag config below
     lazy = true,
     config = function()
-      require('nvim-ts-autotag').setup()
-    end
+      require("nvim-ts-autotag").setup()
+    end,
   },
   -- ast and highlighting
   {
-    'nvim-treesitter/nvim-treesitter',
+    "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPre", "BufNewFile" },
-    build = ':TSUpdate',
+    build = ":TSUpdate",
     config = function()
       -- force nvim-ts-autotag to be loaded here
-      require('nvim-ts-autotag')
+      require("nvim-ts-autotag")
 
-      require('nvim-treesitter.configs').setup({
+      require("nvim-treesitter.configs").setup({
         -- autotag = {
         --   enable = true,
         -- },
         -- A list of parser names, or "all"
         -- TODO - remoing help as it is not found as a language - moliva - 2023/05/14
         -- ensure_installed = { "help", "javascript", "typescript", "c", "lua", "rust", "vim", "toml", "http", "json" },
-        ensure_installed = { "javascript", "typescript", "c", "lua", "rust", "vim", "toml", "http", "json", "gitcommit" },
+        ensure_installed = {
+          "javascript",
+          "typescript",
+          "c",
+          "lua",
+          "rust",
+          "vim",
+          "toml",
+          "http",
+          "json",
+          "gitcommit",
+          "markdown",
+        },
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
         -- Automatically install missing parsers when entering buffer
@@ -51,29 +63,29 @@ return {
           lint_events = { "BufWrite", "CursorHold" },
         },
       })
-    end
+    end,
   },
   {
-    'nvim-treesitter/playground',
-    cmd = { 'TSPlaygroundToggle' },
+    "nvim-treesitter/playground",
+    cmd = { "TSPlaygroundToggle" },
   },
   {
-    'nvim-treesitter/nvim-treesitter-context',
+    "nvim-treesitter/nvim-treesitter-context",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      require('treesitter-context').setup({
-        enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
-        max_lines = 0,            -- How many lines the window should span. Values <= 0 mean no limit.
-        min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+      require("treesitter-context").setup({
+        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+        max_lines = 10, -- How many lines the window should span. Values <= 0 mean no limit.
+        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
         line_numbers = true,
         multiline_threshold = 20, -- Maximum number of lines to collapse for a single context line
-        trim_scope = 'outer',     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-        mode = 'topline',         -- Line used to calculate context. Choices: 'cursor', 'topline'
+        trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        mode = "topline", -- Line used to calculate context. Choices: 'cursor', 'topline'
         -- Separator between context and content. Should be a single character string, like '-'.
         -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
         separator = nil,
         zindex = 20, -- The Z-index of the context window
       })
-    end
+    end,
   },
 }
