@@ -52,7 +52,6 @@
   "nvim-ufo": { "branch": "main", "commit": "95cbe2e99901135704aabdc8732d722cf68b12c9" },
   "nvim-web-devicons": { "branch": "master", "commit": "203da76ecfbb4b192cf830665b03eb651b635c94" },
   "oil.nvim": { "branch": "master", "commit": "9a59256c8e88b29d2150e99b5960b2f111e51f75" },
-  "omnisharp-vim": { "branch": "master", "commit": "2205888fdcaf2b6008d115f343ddc31697a62151" },
   "playground": { "branch": "master", "commit": "ba48c6a62a280eefb7c85725b0915e021a1a0749" },
   "plenary.nvim": { "branch": "master", "commit": "2d9b06177a975543726ce5c73fca176cedbffe9d" },
   "private.nvim": { "branch": "main", "commit": "50beb348c9da9e2d9401e9b94b161c3ffcc27eb2" },

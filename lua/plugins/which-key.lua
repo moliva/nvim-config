@@ -1,9 +1,8 @@
 return {
-  { "echasnovski/mini.nvim", version = false },
-
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    dependencies = { { "echasnovski/mini.nvim", version = false } },
     config = function()
       -- vim.o.timeout = true
       -- vim.o.timeoutlen = 100

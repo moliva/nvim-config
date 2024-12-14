@@ -29,6 +29,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 local parse = require("luasnip.util.parser").parse_snippet
 
 return {
+  parse("print", "print('${1:expression}', $1)"),
   s(
     "module",
     fmt(

@@ -186,6 +186,7 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
       require("lint").linters_by_ft = {
         sh = { "shellcheck" },
         bash = { "shellcheck" },
+        zsh = { "shellcheck" },
         -- lua = { "luacheck" }, -- lua check not working with mason
         -- lua = { "selene" }, -- not adding lots of value currently
         json = { "jsonlint" },

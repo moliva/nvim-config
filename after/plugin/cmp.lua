@@ -11,6 +11,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- })
 
 -- highglight text on yank
+
 vim.cmd([[
 augroup highlight_yank
 autocmd!
