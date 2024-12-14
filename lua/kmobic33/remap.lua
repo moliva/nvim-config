@@ -87,6 +87,12 @@ vim.keymap.set(
   ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
   { desc = "Substitute current word for another in the entire buffer" }
 )
+vim.keymap.set(
+  "v",
+  "<leader><leader>s",
+  'y:%s/<C-r>"/<C-r>"/g<Left><Left>',
+  { desc = "Substitute current selection for another in the entire buffer" }
+)
 
 -- substitute the current visual selection in the line
 vim.keymap.set(
@@ -98,8 +104,8 @@ vim.keymap.set(
 vim.keymap.set(
   "v",
   "<leader>s",
-  'y:s/\\<<C-r>"\\>/<C-r>"/gI<Left><Left><Left>',
-  { desc = "Substitute current word for another in the line" }
+  'y:s/<C-r>"/<C-r>"/g<Left><Left>',
+  { desc = "Substitute current selection for another in the line" }
 )
 
 -- set execution permissions to the current file
