@@ -1,10 +1,12 @@
 vim.g.mapleader = " "
--- explore command for netrw
--- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore current dir" })
 
 -- move things around highlighted in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- move line up or down
+vim.keymap.set({ "n", "i", "v" }, "<a-k>", "<cmd>m .-2<cr>")
+vim.keymap.set({ "n", "i", "v" }, "<a-j>", "<cmd>m .+1<cr>")
 
 vim.keymap.set("n", "Y", "yg$")
 vim.keymap.set("n", "J", "mzJ`z")
@@ -72,12 +74,27 @@ vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 -- substitute the current visual selection in the entire buffer
-vim.keymap.set("n", "<leader><leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set(
+  "n",
+  "<leader><leader>s",
+  ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "Substitute current word for another in the entire buffer" }
+)
 -- substitute the current visual selection in the line
-vim.keymap.set("n", "<leader>s", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set(
+  "n",
+  "<leader>s",
+  ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "Substitute current word for another in the line" }
+)
 
 -- set execution permissions to the current file
-vim.keymap.set("n", "<leader><leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+vim.keymap.set(
+  "n",
+  "<leader><leader>x",
+  "<cmd>!chmod +x %<CR>",
+  { desc = "Make current file executable", silent = true }
+)
 
 -- save on control s, control q for quitting and control x for quit/saving
 local modes = { "n", "i", "v" }
@@ -85,7 +102,7 @@ vim.keymap.set(modes, "<a-S>", "<cmd>w<CR>")
 -- vim.keymap.set(modes, "<C-x>", "<cmd>x<CR>")
 vim.keymap.set(modes, "<C-q>", "<cmd>q<CR>")
 
--- alternate file!
+-- alternate buffer!
 vim.keymap.set(modes, "<a-a>", "<cmd>e #<cr>")
 
 -- vim.keymap.set(modes, "<C-q>q", "<cmd>qa!<CR>")
@@ -100,28 +117,13 @@ vim.keymap.set("n", "<C-w>-", "<cmd>split<CR>")
 -- vim.keymap.set("n", "<C-w>t", "<cmd>tab split<CR>")
 
 -- clear highlighted search
-vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>")
+vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>", { desc = "Toggle search highlight" })
 
--- move line up or down
-vim.keymap.set({ "n", "i", "v" }, "<a-k>", "<cmd>m .-2<cr>")
-vim.keymap.set({ "n", "i", "v" }, "<a-j>", "<cmd>m .+1<cr>")
-
---- @param name string
---- @return boolean
-local function file_exists(name)
-  local f = io.open(name, "r")
-  if f ~= nil then
-    io.close(f)
-    return true
-  else
-    return false
-  end
-end
-
+-- go to
 vim.keymap.set("n", "gr", function()
   local cwd = vim.fn.getcwd()
   local file
-  if file_exists(cwd .. "/README.md") then
+  if require("kmobic33.utils").file_exists(cwd .. "/README.md") then
     file = cwd .. "README.md"
   end
 
@@ -130,341 +132,39 @@ vim.keymap.set("n", "gr", function()
   end
 end, { desc = "Go to README" })
 
---- @param path string
-function parent_dir(path)
-  local index = string.find(path, "/[^/]*$")
-  return string.sub(path, 0, index - 1)
-end
-
+-- find the project description file (e.g. package.json, Cargo.toml) from the current path upwards
 vim.keymap.set(
   "n",
   "gp",
-  function()
-    local file_path = vim.fn.expand("%")
-
-    local base_path = parent_dir(file_path)
-    if not string.match(base_path, "^.?/") then
-      base_path = "./" .. base_path
-    end
-
-    local file
-
-    while file == nil do
-      if file_exists(base_path .. "/package.json") then
-        file = base_path .. "/package.json"
-      elseif file_exists(base_path .. "/Cargo.toml") then
-        file = base_path .. "/Cargo.toml"
-      elseif file_exists(base_path .. "/go.mod") then
-        file = base_path .. "/go.mod"
-      elseif file_exists(base_path .. "/pom.xml") then
-        file = base_path .. "/pom.xml"
-      end
-
-      if file == file_path then
-        file = nil
-      end
-
-      if file == nil then
-        base_path = parent_dir(base_path)
-      end
-    end
-
-    if file then
-      vim.cmd("e " .. file)
-    end
-  end,
+  require("kmobic33.utils").edit_project_description_file_from_current_file,
   { desc = "Looks up for the project description file (e.g. package.json, Cargo.toml) from the current path upwards" }
 )
 
-vim.keymap.set("n", "gP", function()
-  local cwd = vim.fn.getcwd()
-  local file
-  if file_exists(cwd .. "/package.json") then
-    file = cwd .. "/package.json"
-  elseif file_exists(cwd .. "/Cargo.toml") then
-    file = cwd .. "/Cargo.toml"
-  elseif file_exists(cwd .. "/go.mod") then
-    file = cwd .. "/go.mod"
-  elseif file_exists(cwd .. "/pom.xml") then
-    file = cwd .. "/pom.xml"
-  end
-
-  if file then
-    vim.cmd("e " .. file)
-  end
-end, { desc = "Open project description file at cwd (e.g. package.json, Cargo.toml)" })
-
-local function find_context_node(node)
-  local langs = {
-    json = {
-      nodes = {
-        object = [[
-[
-  (object _ @context)
-]
-        ]],
-        document = [[
-[
-  (document _ @context)
-]
-        ]],
-      },
-    },
-    java = {
-      nodes = {
-        constructor_declaration = [[
-[
-  (constructor_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        interface_declaration = [[
-[
-  (interface_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        lambda_expression = [[
-[
-  (lambda_expression _ @context)
-]
-        ]],
-        class_declaration = [[
-[
-  (class_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        method_declaration = [[
-[
-  (method_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-      },
-    },
-    rust = {
-      nodes = {
-        mod_item = [[
-[
-  (mod_item
-  )
-     _ @context
-]
-        ]],
-        macro_invocation = [[
-[
-  (macro_invocation _ @context
-  )
-]
-        ]],
-        macro_definition = [[
-[
-  (macro_definition
-     name: (_) @identifier
-  )
-]
-        ]],
-        block = [[
-[
-  (block _ @context)
-]
-        ]],
-        impl_item = [[
-[
-  (impl_item
-     type: (_) @identifier
-  )
-]
-        ]],
-        function_item = [[
-[
-  (function_item
-     name: (_) @identifier
-  )
-]
-        ]],
-      },
-    },
-    lua = {
-      nodes = {
-        function_declaration = [[
-[
-  (function_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        -- TODO - rethink this , add a way to use "high level" contexts only (e.g. functions) - moliva - 2024/06/04
-        table_constructor = [[
-        [
-          (table_constructor _ @context)
-        ]
-        ]],
-        function_definition = [[
-[
-  (function_definition _ @context)
-]
-]],
-      },
-    },
-    tsx = {
-      nodes = {
-        function_declaration = [[
-[
-  (function_declaration name: (_) @identifier)
-]
-        ]],
-        function_expression = [[
-[
-  (function_expression name: (_) @identifier)
-]
- ]],
-        arrow_function = [[
-[
-  (arrow_function _ @identifier)
-]
-        ]],
-      },
-    },
-    typescript = {
-      nodes = {
-        method_definition = [[
-[
-  (method_definition name: (_) @identifier)
-]
-        ]],
-        function_declaration = [[
-[
-  (function_declaration name: (_) @identifier)
-]
-        ]],
-        function_expression = [[
-[
-  (function_expression name: (_) @identifier)
-]
- ]],
-        arrow_function = [[
-[
-  (arrow_function _ @identifier)
-]
-        ]],
-      },
-    },
-  }
-
-  local file_type = vim.treesitter.get_parser():lang()
-  local lang = langs[file_type]
-  if not lang then
-    vim.notify("Not supported language '" .. file_type .. "'")
-    return
-  end
-
-  local kind = nil
-  while node ~= nil do
-    kind = lang.nodes[node:type()]
-    if kind ~= nil then
-      break
-    end
-
-    node = node:parent()
-  end
-
-  if not node then
-    vim.notify("Not inside a known context")
-
-    return
-  end
-
-  return node, file_type, kind
-end
-
-local function visual_select_context()
-  local start = vim.treesitter.get_node()
-  local node = find_context_node(start)
-  if not node then
-    return
-  end
-
-  local row, column, _ = node:start()
-  vim.api.nvim_win_set_cursor(0, { row + 1, column })
-
-  row, column, _ = node:end_()
-
-  local column_cmd
-  if column == 0 or column == 1 then
-    column_cmd = "0"
-  else
-    column_cmd = "0" .. column - 1 .. "l"
-  end
-
-  vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column_cmd .. "o", true, false, true),
-    "x",
-    true
-  )
-end
-
-local function go_to_current_declaration()
-  local start = vim.treesitter.get_node():parent()
-  local node, lang, kind = find_context_node(start)
-  if not node then
-    return
-  end
-
-  local query = vim.treesitter.query.parse(lang, kind)
-  local iter = query:iter_captures(node, 0)
-  local _, each, _ = iter()
-  local row, column, _ = each:start()
-
-  vim.api.nvim_win_set_cursor(0, { row + 1, column })
-end
-
--- multi lang enviroment
-vim.keymap.set("n", "ga", go_to_current_declaration, { desc = "Go to current function signature/definition" })
-vim.keymap.set("n", "vc", visual_select_context, { desc = "Visually select the current context" })
-
--- rust environment
-local function rust_keymaps()
-  vim.keymap.set(
-    "n",
-    "<leader>vcd",
-    "<cmd>%s/\\<dbg\\!(\\(.*\\))/\\1/g<cr>",
-    { desc = "Remove all dbg!() statements in the file" }
-  )
-
-  vim.keymap.set("n", "<leader>vcl", "<cmd>!just lint<cr>", { desc = "Run just lint" })
-end
-rust_keymaps()
-
--- go environment
-local function go_keymaps()
-  vim.keymap.set("n", "<leader>vct", "<cmd>!go mod tidy<cr>", { desc = "Go mod tidy" })
-end
-go_keymaps()
-
+-- find the project description file (e.g. package.json, Cargo.toml) at the root of the cwd
 vim.keymap.set(
   "n",
-  "<leader>l",
+  "gP",
+  require("kmobic33.utils").edit_project_description_file_in_cwd,
+  { desc = "Open project description file at cwd (e.g. package.json, Cargo.toml)" }
+)
+
+-- local wk = require("which-key")
+
+-- source code + lsp restart
+-- wk.add({
+--   { "<leader><leader>r", group = "Source code" },
+-- })
+vim.keymap.set("n", "<leader><leader>rf", "<cmd>source %<cr><cmd>lua print('Sourced '.. vim.fn.expand('%'))<cr>")
+vim.keymap.set("n", "<leader><leader>rs", ":.lua<cr><cmd>lua print('Sourced lines')<cr>")
+vim.keymap.set("v", "<leader><leader>rs", ":lua<cr><cmd>lua print('Sourced lines')<cr>")
+vim.keymap.set(
+  "n",
+  "<leader><leader>rl",
   "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>",
   { desc = "Restart LSPs" }
 )
 
-vim.keymap.set(
-  "n",
-  "<leader>vs",
-  "<cmd>source %<cr><cmd>lua vim.print('Reloaded '.. vim.fn.expand('%'))<cr>",
-  { desc = "Source the current file" }
-)
-
+-- git
 vim.keymap.set("n", "<leader>gu", "<cmd>!gpull<cr>", { desc = "Git pull" })
 -- vim.keymap.set("n", "<leader>gq", "<cmd>Git checkout <cr>", { desc = "Git pull" })
 -- vim.fn.input("Grep > ")
-
-vim.keymap.set("n", "<leader><leader>rf", "<cmd>source %<cr>")
-vim.keymap.set("n", "<leader><leader>rs", ":.lua<cr>")
-vim.keymap.set("v", "<leader><leader>rs", ":lua<cr>")
