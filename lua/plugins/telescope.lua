@@ -85,16 +85,6 @@ return {
         desc = "Telescope",
       },
       {
-        "<leader>pf",
-        function()
-          require("telescope").extensions.smart_open.smart_open({
-            cwd_only = true,
-            filename_first = false,
-          })
-        end,
-        desc = "Telescope smart_open",
-      },
-      {
         "<C-p>",
         function()
           require("telescope.builtin").git_files()
@@ -110,7 +100,7 @@ return {
             cwd = "/Users/moliva/.config/nvim",
           })
         end,
-        desc = "Telescope smart open on nvim dir",
+        desc = "Telescope nvim config",
       },
       {
         "<leader>pb",
@@ -121,7 +111,7 @@ return {
             cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
           })
         end,
-        desc = "Telescope smart open on nvim dir",
+        desc = "Telescope builtins",
       },
       {
         -- global search
@@ -133,6 +123,16 @@ return {
           })
         end,
         desc = "Telescope smart_open (global)",
+      },
+      {
+        "<leader>pf",
+        function()
+          require("telescope").extensions.smart_open.smart_open({
+            cwd_only = true,
+            filename_first = false,
+          })
+        end,
+        desc = "Telescope smart_open",
       },
       {
         -- leaving old telescope find files for backup
