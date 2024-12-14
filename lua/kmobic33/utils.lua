@@ -132,4 +132,26 @@ function M.edit_project_description_file_in_cwd()
   end
 end
 
+--Toggles the quickfix window open/close
+function M.toggle_quickfix()
+  vim.cmd([[
+    if getqflist({'winid' : 1}).winid != 0
+      cclose
+    else
+      copen
+    endif
+  ]])
+end
+
+--Toggles the location list window open/close
+function M.toggle_locationlist()
+  vim.cmd([[
+    if getloclist(0, {'winid' : 1}).winid != 0
+      lopen
+    else
+      lclose
+    endif
+  ]])
+end
+
 return M

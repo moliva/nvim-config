@@ -3,175 +3,15 @@ local M = {}
 ---Helper function to find the context node given a start node for different languages
 ---Returns the context node found, the language and the kind of node found (TS query)
 ---@param node TSNode
----@return TSNode | nil, string, string
+---@return TSNode | nil, string | nil, string | nil
 local function find_context_node(node)
-  local langs = {
-    json = {
-      nodes = {
-        object = [[
-[
-  (object _ @context)
-]
-        ]],
-        document = [[
-[
-  (document _ @context)
-]
-        ]],
-      },
-    },
-    java = {
-      nodes = {
-        constructor_declaration = [[
-[
-  (constructor_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        interface_declaration = [[
-[
-  (interface_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        lambda_expression = [[
-[
-  (lambda_expression _ @context)
-]
-        ]],
-        class_declaration = [[
-[
-  (class_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        method_declaration = [[
-[
-  (method_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-      },
-    },
-    rust = {
-      nodes = {
-        mod_item = [[
-[
-  (mod_item
-  )
-     _ @context
-]
-        ]],
-        macro_invocation = [[
-[
-  (macro_invocation _ @context
-  )
-]
-        ]],
-        macro_definition = [[
-[
-  (macro_definition
-     name: (_) @identifier
-  )
-]
-        ]],
-        block = [[
-[
-  (block _ @context)
-]
-        ]],
-        impl_item = [[
-[
-  (impl_item
-     type: (_) @identifier
-  )
-]
-        ]],
-        function_item = [[
-[
-  (function_item
-     name: (_) @identifier
-  )
-]
-        ]],
-      },
-    },
-    lua = {
-      nodes = {
-        function_declaration = [[
-[
-  (function_declaration
-     name: (_) @identifier
-  )
-]
-        ]],
-        -- TODO - rethink this , add a way to use "high level" contexts only (e.g. functions) - moliva - 2024/06/04
-        table_constructor = [[
-        [
-          (table_constructor _ @context)
-        ]
-        ]],
-        function_definition = [[
-[
-  (function_definition _ @context)
-]
-]],
-      },
-    },
-    tsx = {
-      nodes = {
-        function_declaration = [[
-[
-  (function_declaration name: (_) @identifier)
-]
-        ]],
-        function_expression = [[
-[
-  (function_expression name: (_) @identifier)
-]
- ]],
-        arrow_function = [[
-[
-  (arrow_function _ @identifier)
-]
-        ]],
-      },
-    },
-    typescript = {
-      nodes = {
-        method_definition = [[
-[
-  (method_definition name: (_) @identifier)
-]
-        ]],
-        function_declaration = [[
-[
-  (function_declaration name: (_) @identifier)
-]
-        ]],
-        function_expression = [[
-[
-  (function_expression name: (_) @identifier)
-]
- ]],
-        arrow_function = [[
-[
-  (arrow_function _ @identifier)
-]
-        ]],
-      },
-    },
-  }
+  local langs = require("kmobic33.lsp.contexts")
 
   local file_type = vim.treesitter.get_parser():lang()
   local lang = langs[file_type]
   if not lang then
     vim.notify("Not supported language '" .. file_type .. "'")
-    return
+    return nil, nil, nil
   end
 
   local kind = nil
@@ -187,7 +27,7 @@ local function find_context_node(node)
   if not node then
     vim.notify("Not inside a known context")
 
-    return
+    return nil, nil, nil
   end
 
   return node, file_type, kind
@@ -267,7 +107,7 @@ function M.on_attach(_client, bufnr)
   local wk = require("which-key")
 
   -- symbols
-  vim.keymap.set("n", "<leader>o", "<cmd>SymbolsOutline<CR>", { desc = "Open symbols outline" })
+  vim.keymap.set("n", "<leader>o", "<cmd>SymbolsOutline<CR>", { desc = "Open symbols outline", unpack(opts) })
 
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
   vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, opts)
@@ -278,7 +118,8 @@ function M.on_attach(_client, bufnr)
   -- vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
   -- vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
 
-  vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+  -- NOTE(miguel): not sure its worth it, since i'm usign Trouble - 2024/12/14
+  -- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Set loclist with diagnostics", unpack(opts) })
 
   -- input a name/filter to look for a symbol in the workspaces
 
@@ -287,7 +128,7 @@ function M.on_attach(_client, bufnr)
   vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
   vim.keymap.set("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, opts)
+  end, { desc = "List current workspace folders", unpack(opts) })
 
   wk.add({
     -- format
