@@ -3,7 +3,7 @@ local function grep_string_input()
 end
 
 ---live grep using extension filter
----@param opts {cwd: string | nil}
+---@param opts {cwd: string | nil} | nil
 local function live_multi_grep(opts)
   opts = opts or {}
   opts.cwd = opts.cwd or vim.uv.cwd()

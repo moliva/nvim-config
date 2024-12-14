@@ -92,6 +92,7 @@ local function setterName(args)
 end
 
 return {
+  parse("plog", 'console.log("${1:expression}", $1);'),
   parse("log", "console.log('${1:expression}', $1)"),
   s(
     "forconst",

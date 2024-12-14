@@ -220,19 +220,30 @@ return {
       })
 
       lsp.ensure_installed({
+        "lua_ls",
         "ts_ls",
         "eslint",
-        "lua_ls",
         "rust_analyzer",
+
+        -- ◍ bash-language-server bashls
+        -- ◍ docker-compose-language-service docker_compose_language_service
+        -- ◍ eslint-lsp eslint
+        -- ◍ json-lsp jsonls
+        -- ◍ lua-language-server lua_ls
+        -- ◍ rust-analyzer rust_analyzer
+        -- ◍ stylua
+        -- ◍ taplo
+        -- ◍ typescript-language-server ts_ls
+        -- ◍ yaml-language-server yamlls
       })
 
-      local on_attach = function(c, b)
+      local global_on_attach = function(c, b)
         -- require('lsp_mappings').on_attach(c, b)
         require("kmobic33.lsp").on_attach(c, b)
         -- require("inlay-hints").on_attach(c, b)
       end
 
-      lsp.on_attach(on_attach)
+      lsp.on_attach(global_on_attach)
 
       local capabilities = require("kmobic33.lsp").get_capabilities()
 
@@ -240,22 +251,22 @@ return {
 
       lspconfig.csharp_ls.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
       })
 
       lspconfig.docker_compose_language_service.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
       })
 
       lspconfig.dockerls.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
       })
 
       lspconfig.yamlls.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
         settings = {
           yaml = {
             schemas = {
@@ -278,7 +289,7 @@ return {
 
       lspconfig.solidity.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
         cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
         filetypes = { "solidity" },
         root_dir = lspconfig.util.root_pattern(".prettierrc"),
@@ -302,7 +313,7 @@ return {
       -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
         settings = {
           Lua = {
             runtime = {
@@ -336,7 +347,7 @@ return {
 
       lspconfig.bashls.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
         filetypes = { "sh", "bash", "zsh" },
       })
 
@@ -356,56 +367,51 @@ return {
       --   },
       -- })
 
-      -- XXX - working on cssmodules lsp, this creates a race condition - moliva - 2024/04/04
-      if false then
-        lsp.skip_server_setup({ "ts_ls" })
-      else
-        lspconfig.ts_ls.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-          -- need to install previously:
-          cmd = { "typescript-language-server", "--stdio" },
-          -- disable_formatting = true,
-          settings = {
-            javascript = {
-              inlayHints = {
-                includeInlayEnumMemberValueHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayVariableTypeHints = true,
-              },
-            },
-            typescript = {
-              inlayHints = {
-                includeInlayEnumMemberValueHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayVariableTypeHints = true,
-              },
+      lspconfig.ts_ls.setup({
+        capabilities = capabilities,
+        -- on_attach = on_attach,
+        -- need to install previously:
+        cmd = { "typescript-language-server", "--stdio" },
+        -- disable_formatting = true,
+        settings = {
+          javascript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
             },
           },
-        })
-      end
+          typescript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+            },
+          },
+        },
+      })
 
       lspconfig.cssls.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
       })
 
       lspconfig.html.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
       })
 
       lspconfig.pyright.setup({
         capabilities = capabilities,
-        on_attach = on_attach,
+        -- on_attach = on_attach,
       })
 
       lspconfig.jsonls.setup({

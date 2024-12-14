@@ -196,15 +196,16 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
   -- formatting
   {
     "stevearc/conform.nvim",
-    keys = {
-      {
-        "<leader>f",
-        function()
-          require("conform").format()
-        end,
-        desc = "Format file",
-      },
-    },
+    lazy= true,
+    -- keys = {
+    --   {
+    --     "<leader>f",
+    --     function()
+    --       require("conform").format()
+    --     end,
+    --     desc = "Format file",
+    --   },
+    -- },
     config = function()
       local conform = require("conform")
       conform.setup({

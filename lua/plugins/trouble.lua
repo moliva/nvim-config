@@ -7,7 +7,7 @@ return {
     { "<leader>x", nil, desc = "Trouble" },
     {
       "<leader>xx",
-      "<cmd>Trouble diagnostics toggle<cr>",
+      "<cmd>Trouble diagnostics toggle focus=true<cr>",
       desc = "TroubleToggle",
       cmdopts,
     },
@@ -43,7 +43,10 @@ return {
     },
   },
   config = function()
-    local opts = {}
+    local opts = {
+      auto_preview = false,
+      -- follow = false,
+    }
     -- local opts = {
     --   position = "bottom", -- position of the list can be: bottom, top, left, right
     --   height = 10, -- height of the trouble list when position is top or bottom

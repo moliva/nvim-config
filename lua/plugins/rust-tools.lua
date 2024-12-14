@@ -1,11 +1,11 @@
 return {
   {
-    'simrat39/rust-tools.nvim',
+    "simrat39/rust-tools.nvim",
     ft = "rust",
     config = function()
       -- local ih = require("inlay-hints")
 
-      local rt = require('rust-tools')
+      local rt = require("rust-tools")
 
       local mason_registry = require("mason-registry")
       local codelldb = mason_registry.get_package("codelldb")
@@ -22,7 +22,12 @@ return {
         -- Hover actions
         vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr, desc = "Hover actions" })
         -- Code action groups
-        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr, desc = "Code action" })
+        vim.keymap.set(
+          "n",
+          "<Leader>a",
+          rt.code_action_group.code_action_group,
+          { buffer = bufnr, desc = "Code action" }
+        )
       end
 
       local opts = {
@@ -124,6 +129,6 @@ return {
       }
 
       rt.setup(opts)
-    end
-  }
+    end,
+  },
 }
