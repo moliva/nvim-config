@@ -72,8 +72,10 @@ vim.keymap.set("n", "Q", "<nop>")
 
 -- quickfix + location list movement
 vim.keymap.set("n", "<leader>q", u.toggle_quickfix, { desc = "Quickfix toggle" })
-vim.keymap.set("n", "<C-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "Quickfix previous" })
+
+-- FIXME(miguel): this is causing a No Errors at startup - 2024/12/14
+vim.keymap.set("n", "<c-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
 
 -- TODO(miguel): not sure this works as i intend it - 2024/12/14
 vim.keymap.set("n", "<leader>l", u.toggle_locationlist, { desc = "Location list toggle" })
@@ -184,4 +186,3 @@ vim.keymap.set(
   "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>",
   { desc = "Restart LSPs" }
 )
-
