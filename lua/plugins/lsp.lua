@@ -5,20 +5,6 @@ return {
   --   -- event = { "BufReadPre *.lua" },
   -- },
 
-  {
-    "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
-    opts = {
-      library = {
-        -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "luvit-meta/library", words = { "vim%.uv" } },
-      },
-    },
-    enabled = function(root_dir)
-      return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
-    end,
-  },
   { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
   { -- optional completion source for require statements and module annotations
     "hrsh7th/nvim-cmp",
@@ -182,6 +168,20 @@ return {
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp" },
       { "williamboman/mason-lspconfig.nvim" },
+      {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+          library = {
+            -- See the configuration section for more details
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "luvit-meta/library", words = { "vim%.uv" } },
+          },
+        },
+        enabled = function(_)
+          return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
+        end,
+      },
       { "neovim/nvim-lspconfig" },
       {
         "williamboman/mason.nvim",
