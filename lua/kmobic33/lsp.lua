@@ -141,6 +141,9 @@ function M.on_attach(_client, bufnr)
   end, { desc = "List current workspace folders", unpack(opts) })
 
   wk.add({
+    -- lsp workspace
+    { "<leader>w", group = "LSP workspaces", unpack(opts) },
+
     -- format
     -- TODO - table extend below for the opts + { desc } - moliva - 2024/02/06
     -- vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format" })

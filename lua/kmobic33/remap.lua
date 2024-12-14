@@ -171,6 +171,7 @@ vim.keymap.set(
 -- local wk = require("which-key")
 
 -- source code + lsp restart
+--
 -- wk.add({
 --   { "<leader><leader>r", group = "Source code" },
 -- })
@@ -184,15 +185,3 @@ vim.keymap.set(
   { desc = "Restart LSPs" }
 )
 
--- git
-vim.keymap.set("n", "<leader>gu", "<cmd>!gpull<cr>", { desc = "Git pull" })
-vim.keymap.set("n", "<leader>gk", function()
-  local branch = vim.fn.input("Branch > ")
-  local result = vim.cmd.Git("checkout " .. branch)
-  vim.notify(result)
-end, { desc = "Git checkout" })
-vim.keymap.set("n", "<leader>gK", function()
-  local branch = vim.fn.input("New Branch > ")
-  local result = vim.cmd.Git("checkout -b" .. branch)
-  vim.notify(result)
-end, { desc = "Git checkout new branch" })

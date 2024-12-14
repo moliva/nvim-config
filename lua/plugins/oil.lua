@@ -13,13 +13,13 @@ return {
         end,
         desc = "Open parent directory",
       },
-      {
-        "<leader>pv",
-        function()
-          require("oil").open()
-        end,
-        desc = "Open parent directory",
-      },
+      -- {
+      --   "<leader>pv",
+      --   function()
+      --     require("oil").open()
+      --   end,
+      --   desc = "Open parent directory",
+      -- },
     },
     config = function()
       vim.g.loaded_netrw = 1
