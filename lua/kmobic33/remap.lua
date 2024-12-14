@@ -72,10 +72,11 @@ vim.keymap.set("n", "Q", "<nop>")
 
 -- quickfix + location list movement
 vim.keymap.set("n", "<leader>q", u.toggle_quickfix, { desc = "Quickfix toggle" })
+-- NOTE(miguel): need to defer this, to avoid c-j command to be called on startup and showing errors - 2024/12/14
+vim.defer_fn(function()
+  vim.keymap.set("n", "<c-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
+end, 0)
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "Quickfix previous" })
-
--- FIXME(miguel): this is causing a No Errors at startup - 2024/12/14
-vim.keymap.set("n", "<c-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
 
 -- TODO(miguel): not sure this works as i intend it - 2024/12/14
 vim.keymap.set("n", "<leader>l", u.toggle_locationlist, { desc = "Location list toggle" })
