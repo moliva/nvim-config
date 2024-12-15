@@ -11,18 +11,18 @@ return {
       desc = "TroubleToggle",
       cmdopts,
     },
-    {
-      "<leader>xw",
-      "<cmd>Trouble workspace_diagnostics toggle<cr>",
-      desc = "TroubleToggle workspace_diagnostics",
-      cmdopts,
-    },
-    {
-      "<leader>xd",
-      "<cmd>Trouble document_diagnostics toggle<cr>",
-      desc = "TroubleToggle document_diagnostics",
-      cmdopts,
-    },
+    -- {
+    --   "<leader>xw",
+    --   "<cmd>Trouble workspace_diagnostics toggle<cr>",
+    --   desc = "TroubleToggle workspace_diagnostics",
+    --   cmdopts,
+    -- },
+    -- {
+    --   "<leader>xd",
+    --   "<cmd>Trouble document_diagnostics toggle<cr>",
+    --   desc = "TroubleToggle document_diagnostics",
+    --   cmdopts,
+    -- },
     {
       "<leader>xl",
       "<cmd>Trouble loclist toggle<cr>",
@@ -35,12 +35,13 @@ return {
       desc = "TroubleToggle quickfix",
       cmdopts,
     },
-    {
-      "gR",
-      "<cmd>Trouble lsp_references toggle<cr>",
-      desc = "TroubleToggle lsp_references",
-      cmdopts,
-    },
+    -- TODO(miguel): check this one again, maybe assign a different keymap - 2024/12/15
+    -- {
+    --   "gR",
+    --   "<cmd>Trouble lsp_references toggle<cr>",
+    --   desc = "TroubleToggle lsp_references",
+    --   cmdopts,
+    -- },
   },
   config = function()
     local opts = {

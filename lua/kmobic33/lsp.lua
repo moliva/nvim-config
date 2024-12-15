@@ -271,9 +271,11 @@ function M.on_attach(_client, bufnr)
     -- "vim" lsp actions
     { "<leader>v", group = "Vim", unpack(opts) },
     { "<leader>vc", group = "Code", unpack(opts) },
-    { "<leader>vca", vim.lsp.buf.code_action, desc = "Actions from LSP to the current line", unpack(opts) },
-    { "<leader>vd", vim.diagnostic.open_float, desc = "Diagnostics float", unpack(opts) },
-    { "<leader>vf", "<cmd>Telescope diagnostics<cr>", desc = "Telescope diagnostics", unpack(opts) },
+    { "<leader>vca", vim.lsp.buf.code_action, desc = "Actions from LSP", unpack(opts) },
+    -- { "<leader>vd", vim.diagnostic.open_float, desc = "Diagnostics float", unpack(opts) },
+
+    -- Telescope
+    { "<leader>px", "<cmd>Telescope diagnostics<cr>", desc = "Telescope diagnostics", unpack(opts) },
 
     {
       "<leader>vrn",
@@ -283,8 +285,9 @@ function M.on_attach(_client, bufnr)
       desc = "Rename",
       unpack(opts),
     },
-    { "<leader>vws", vim.lsp.buf.workspace_symbol, desc = "List synmbols in the current workspace", unpack(opts) },
-    { "<leader>vrr", "<cmd>Telescope lsp_references<cr>", desc = "References to current symbol", unpack(opts) },
+    { "<leader>vws", vim.lsp.buf.workspace_symbol, desc = "List symbols in the current workspace", unpack(opts) },
+    -- NOTE(miguel): gr works the same way - 2024/12/15
+    -- { "<leader>vrr", "<cmd>Telescope lsp_references<cr>", desc = "References to current symbol", unpack(opts) },
 
     {
       "<leader>vi",

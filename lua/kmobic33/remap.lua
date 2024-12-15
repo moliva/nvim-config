@@ -63,6 +63,7 @@ vim.defer_fn(function()
   vim.keymap.set("n", "<c-j>", "<cmd>cnext<CR>zz", { desc = "Quickfix next" })
 end, 0)
 vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "Quickfix previous" })
+-- :cdo {cmd}
 
 -- TODO(miguel): not sure this works as i intend it - 2024/12/14
 vim.keymap.set("n", "<leader>l", u.toggle_locationlist, { desc = "Location list toggle" })
@@ -129,11 +130,11 @@ vim.keymap.set("n", "<C-w>-", "<cmd>split<CR>")
 vim.keymap.set("n", "<leader>,", "<cmd>set hlsearch! hlsearch?<CR>", { desc = "Toggle search highlight" })
 
 -- go to
-vim.keymap.set("n", "gr", function()
+vim.keymap.set("n", "gR", function()
   local cwd = vim.fn.getcwd()
   local file
   if u.file_exists(cwd .. "/README.md") then
-    file = cwd .. "README.md"
+    file = cwd .. "/README.md"
   end
 
   if file then
