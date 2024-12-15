@@ -42,6 +42,8 @@ vim.keymap.set("n", "<leader>Y", '"+Y')
 -- TODO - close all other buffers (not in a visible window) - moliva - 2024/03/13
 -- TODO - move window to focus in the high end for meetings - moliva - 2024/03/16
 
+-- TODO - wrap in dbg! - moliva - 2024/12/15
+
 -- window movement
 -- vim.keymap.set("n", "<c-j>", "<c-w>j")
 -- vim.keymap.set("n", "<c-k>", "<c-w>k")

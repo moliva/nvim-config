@@ -41,6 +41,39 @@ local function find_context_node(node)
   return find_node(node, langs)
 end
 
+---Visually select a range from start row and column to end row and column
+---Conditionally delete the range if delete is true
+---@param start_row number
+---@param start_column number
+---@param end_row number
+---@param end_column number
+---@param delete boolean|nil
+local function visually_select_range(start_row, start_column, end_row, end_column, delete)
+  -- set cursor at the start
+  vim.api.nvim_win_set_cursor(0, { start_row + 1, start_column })
+
+  local column_cmd
+  if end_column == 0 or end_column == 1 then
+    column_cmd = "0"
+  else
+    column_cmd = "0" .. end_column - 1 .. "l"
+  end
+
+  local delete_cmd = delete and "d" or ""
+
+  -- select the range
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes(
+      "<esc>v" .. end_row + 1 .. "gg" .. column_cmd .. "o" .. delete_cmd,
+      true,
+      false,
+      true
+    ),
+    "x",
+    true
+  )
+end
+
 ---Delete the surrounding function call to a list of arguments leaving the arguments alone
 local function delete_surrounding_call()
   local start = vim.treesitter.get_node()
@@ -58,45 +91,16 @@ local function delete_surrounding_call()
   local row, column, _ = each:end_()
   local row2, column2, _ = node:end_()
 
-  -- set cursor at the end of the arguments
-  -- TODO(miguel): column -1 for lua, check for other langs works the same way - 2024/12/15
-  vim.api.nvim_win_set_cursor(0, { row + 1, column - 1 })
+  -- TODO(miguel): check that this works for other langs other than lua function call - 2024/12/15
+  -- might need to +1 the column
+  visually_select_range(row, column - 1, row2, column2, true)
 
-  local column_cmd
-  if column2 == 0 or column2 == 1 then
-    column_cmd = "0"
-  else
-    column_cmd = "0" .. column2 - 1 .. "l"
-  end
+  row, column, _ = node:start()
+  row2, column2, _ = each:start()
 
-  -- visually select end of call and delete
-  vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes("<esc>v" .. row2 + 1 .. "gg" .. column_cmd .. "od", true, false, true),
-    "x",
-    true
-  )
-
-  local row, column, _ = node:start()
-  local row2, column2, _ = each:start()
-
-  -- set cursor at the start of the function call
-  vim.api.nvim_win_set_cursor(0, { row + 1, column })
-
-  local column_cmd
-  if column2 == 0 or column2 == 1 then
-    column_cmd = "0"
-  else
-    -- TODO(miguel): check that this works for other langs other than lua function call - 2024/12/15
-    -- might need to -1 the column
-    column_cmd = "0" .. column2 .. "l"
-  end
-
-  -- visually select start of call and delete
-  vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes("<esc>v" .. row2 + 1 .. "gg" .. column_cmd .. "od", true, false, true),
-    "x",
-    true
-  )
+  -- TODO(miguel): check that this works for other langs other than lua function call - 2024/12/15
+  -- might need to -1 the column
+  visually_select_range(row, column, row2, column2 + 1, true)
 end
 
 ---Delete the current function call with all its arguments
@@ -110,22 +114,9 @@ local function delete_call()
   end
 
   local row, column, _ = node:start()
-  vim.api.nvim_win_set_cursor(0, { row + 1, column })
+  local row2, column2, _ = node:end_()
 
-  row, column, _ = node:end_()
-
-  local column_cmd
-  if column == 0 or column == 1 then
-    column_cmd = "0"
-  else
-    column_cmd = "0" .. column - 1 .. "l"
-  end
-
-  vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column_cmd .. "od", true, false, true),
-    "x",
-    true
-  )
+  visually_select_range(row, column, row2, column2, true)
 end
 
 ---Select the current code context visually
@@ -137,22 +128,9 @@ local function visual_select_context()
   end
 
   local row, column, _ = node:start()
-  vim.api.nvim_win_set_cursor(0, { row + 1, column })
+  local end_row, end_column, _ = node:end_()
 
-  row, column, _ = node:end_()
-
-  local column_cmd
-  if column == 0 or column == 1 then
-    column_cmd = "0"
-  else
-    column_cmd = "0" .. column - 1 .. "l"
-  end
-
-  vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column_cmd .. "o", true, false, true),
-    "x",
-    true
-  )
+  visually_select_range(row, column, end_row, end_column)
 end
 
 ---Go to the current code body declaration

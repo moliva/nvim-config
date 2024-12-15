@@ -301,10 +301,10 @@ return {
       --   on_attach = on_attach,
       -- })
 
-      lspconfig.jdtls.setup({
-        --   capabilities = capabilities,
-        --   on_attach = on_attach,
-      })
+      -- lspconfig.jdtls.setup({
+      --   capabilities = capabilities,
+      --   on_attach = on_attach,
+      -- })
 
       local lua_rtp = vim.split(package.path, ";")
       table.insert(lua_rtp, "lua/?.lua")
@@ -351,7 +351,7 @@ return {
         filetypes = { "sh", "bash", "zsh" },
       })
 
-      local home = os.getenv("HOME")
+      -- local home = os.getenv("HOME")
 
       -- lspconfig.cssmodules_ls.setup({
       --
