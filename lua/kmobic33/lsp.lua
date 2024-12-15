@@ -1,12 +1,10 @@
 local M = {}
 
----Helper function to find the context node given a start node for different languages
+---Helper function to find the context node given a start node and different language contexts
 ---Returns the context node found, the language and the kind of node found (TS query)
 ---@param node TSNode
 ---@return TSNode | nil, string | nil, string | nil
-local function find_context_node(node)
-  local langs = require("kmobic33.lsp.contexts")
-
+local function find_node(node, langs)
   local file_type = vim.treesitter.get_parser():lang()
   local lang = langs[file_type]
   if not lang then
@@ -31,6 +29,103 @@ local function find_context_node(node)
   end
 
   return node, file_type, kind
+end
+
+---Helper function to find the context node given a start node for different languages
+---Returns the context node found, the language and the kind of node found (TS query)
+---@param node TSNode
+---@return TSNode | nil, string | nil, string | nil
+local function find_context_node(node)
+  local langs = require("kmobic33.lsp.contexts")
+
+  return find_node(node, langs)
+end
+
+---Delete the surrounding function call to a list of arguments leaving the arguments alone
+local function delete_surrounding_call()
+  local start = vim.treesitter.get_node()
+  local langs = require("kmobic33.lsp.calls")
+  local node, lang, kind = find_node(start, langs)
+
+  if not node then
+    return
+  end
+
+  local query = vim.treesitter.query.parse(lang, kind)
+  local iter = query:iter_captures(node, 0)
+  local _, each, _ = iter()
+
+  local row, column, _ = each:end_()
+  local row2, column2, _ = node:end_()
+
+  -- set cursor at the end of the arguments
+  -- TODO(miguel): column -1 for lua, check for other langs works the same way - 2024/12/15
+  vim.api.nvim_win_set_cursor(0, { row + 1, column - 1 })
+
+  local column_cmd
+  if column2 == 0 or column2 == 1 then
+    column_cmd = "0"
+  else
+    column_cmd = "0" .. column2 - 1 .. "l"
+  end
+
+  -- visually select end of call and delete
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes("<esc>v" .. row2 + 1 .. "gg" .. column_cmd .. "od", true, false, true),
+    "x",
+    true
+  )
+
+  local row, column, _ = node:start()
+  local row2, column2, _ = each:start()
+
+  -- set cursor at the start of the function call
+  vim.api.nvim_win_set_cursor(0, { row + 1, column })
+
+  local column_cmd
+  if column2 == 0 or column2 == 1 then
+    column_cmd = "0"
+  else
+    -- TODO(miguel): check that this works for other langs other than lua function call - 2024/12/15
+    -- might need to -1 the column
+    column_cmd = "0" .. column2 .. "l"
+  end
+
+  -- visually select start of call and delete
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes("<esc>v" .. row2 + 1 .. "gg" .. column_cmd .. "od", true, false, true),
+    "x",
+    true
+  )
+end
+
+---Delete the current function call with all its arguments
+local function delete_call()
+  local start = vim.treesitter.get_node()
+  local langs = require("kmobic33.lsp.calls")
+  local node = find_node(start, langs)
+
+  if not node then
+    return
+  end
+
+  local row, column, _ = node:start()
+  vim.api.nvim_win_set_cursor(0, { row + 1, column })
+
+  row, column, _ = node:end_()
+
+  local column_cmd
+  if column == 0 or column == 1 then
+    column_cmd = "0"
+  else
+    column_cmd = "0" .. column - 1 .. "l"
+  end
+
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes("<esc>v" .. row + 1 .. "gg" .. column_cmd .. "od", true, false, true),
+    "x",
+    true
+  )
 end
 
 ---Select the current code context visually
@@ -161,6 +256,10 @@ function M.on_attach(_client, bufnr)
 
     -- visual selection
     { "vc", visual_select_context, desc = "Visually select the current context", unpack(opts) },
+
+    -- delete function calls
+    { "dc", delete_call, desc = "Delete function call", unpack(opts) },
+    { "dsc", delete_surrounding_call, desc = "Delete surrounding function call", unpack(opts) },
 
     -- go to
     { "g", group = "Go to", unpack(opts) },

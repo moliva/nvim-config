@@ -23,44 +23,30 @@ vim.keymap.set("n", "<A-w>", "<cmd>%bd|e#<cr>", { desc = "Close all buffers but 
 -- vim.keymap.set("n", "<A-Q>", "<cmd>bufdo bwipeout<cr>", { desc = "Close all buffers"})
 vim.keymap.set("n", "<A-Q>", "<cmd>1,$bd!<cr>", { desc = "Close all buffers" })
 
--- vim.keymap.set("n", "<leader>vwm", require("vim_with_me").StartVimWithMe)
--- vim.keymap.set("n", "<leader>svwm", require("vim_with_me").StopVimWithMe)
-
--- greatest remap ever (?
 -- allows you to visual highlight text and paste over without replacing the buffer
-vim.keymap.set("x", "<leader>p", '"_dP')
+vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste over without replacing the buffer" })
 
 vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete into an anonymous buffer" })
+vim.keymap.set("n", "<leader>D", '"_D', { desc = "Delete into an anonymous buffer" })
 
--- TODO - reimplement this using treesitter instead to be able to copy also derives in rust and annotations in other langs - moliva - 2024/03/11
--- copy everything between { and } including the lines
-vim.keymap.set("n", "YY", "va{Vy}")
-
--- TODO - remove wrapping () {} [] plus the function name (function call) - moliva - 2024/03/04
--- eg Some(saraza) -> saraza
--- try with treesitter
+-- yank to the system clipboard!
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
+vim.keymap.set("n", "<leader>Y", '"+Y')
 
 -- TODO - delete/select/yank until _ - moliva - 2024/03/05
 -- TODO - delete/select/yank until next capitalized letter - moliva - 2024/03/05
+
 -- TODO - go to the function declaration (when inside that function) - moliva - 2024/03/05
 -- TODO - delete between parenthesis or , and parenthesis (function call) - moliva - 2024/03/08
 -- TODO - cmd+shift+s => save all buffers - moliva - 2024/03/09
 -- TODO - close all other buffers (not in a visible window) - moliva - 2024/03/13
 -- TODO - move window to focus in the high end for meetings - moliva - 2024/03/16
 
--- TODO - go to plugin config - moliva - 2024/04/11
-
 -- window movement
 -- vim.keymap.set("n", "<c-j>", "<c-w>j")
 -- vim.keymap.set("n", "<c-k>", "<c-w>k")
 -- vim.keymap.set("n", "<c-h>", "<c-w>h")
 -- vim.keymap.set("n", "<c-l>", "<c-w>l")
-
--- next greatest remap ever
--- yank to the system clipboard!
-vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
-
-vim.keymap.set("n", "<leader>Y", '"+Y')
 
 -- control c acts as escape in visual edit mode
 vim.keymap.set("i", "<C-c>", "<Esc>")
