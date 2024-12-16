@@ -1,5 +1,5 @@
 return {
-  -- issue here!
+  -- tree dir
   {
     "nvim-tree/nvim-tree.lua",
     cmd = "NvimTreeToggle",
@@ -9,8 +9,6 @@ return {
     config = function()
       require("nvim-tree").setup()
     end,
-
-    -- tag = 'nightly' -- optional, updated every week. (see issue #1193)
   },
 
   -- edit
@@ -26,6 +24,7 @@ return {
     end,
   },
 
+  -- visual multi cursor edit
   {
     "mg979/vim-visual-multi",
     branch = "master",
@@ -168,19 +167,6 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
     end,
   },
 
-  -- markdown
-  {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function()
-      vim.fn["mkdp#util#install"]()
-    end,
-  },
-
-  -- typescript
-  -- use 'jose-elias-alvarez/typescript.nvim'
-
   -- maximize windows
   {
     "declancm/maximize.nvim",
@@ -197,4 +183,17 @@ let g:VM_maps["Add Cursor Up"]               = '<C-k>'
       require("maximize").setup()
     end,
   },
+
+  -- markdown
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
+  },
+
+  -- typescript
+  -- use 'jose-elias-alvarez/typescript.nvim'
 }

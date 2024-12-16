@@ -1,5 +1,17 @@
 local M = {}
 
+---Ensure the installation of the following clis (whether they are lsps, linters, formatters or other tools)
+---@param clis table
+function M.ensure_installed(clis)
+  local registry = require("mason-registry")
+
+  for _, cli in ipairs(clis) do
+    if not registry.is_installed(cli) then
+      vim.cmd(":MasonInstall " .. cli)
+    end
+  end
+end
+
 ---Helper function to find the context node given a start node and different language contexts
 ---Returns the context node found, the language and the kind of node found (TS query)
 ---@param node TSNode

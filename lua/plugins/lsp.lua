@@ -32,7 +32,6 @@ return {
       require("litee.lib").setup(opts)
     end,
   },
-
   {
     "ldelossa/litee-calltree.nvim",
     dependencies = "ldelossa/litee.nvim",
@@ -199,6 +198,7 @@ return {
 
       -- XXX - lsp-zero + lspconfig living together to avoid cycle dependencies - moliva - 2023/05/15
       local lsp = require("lsp-zero").preset("recommended")
+      local klsp = require("kmobic33.lsp")
 
       -- This is where all the LSP shenanigans will live
 
@@ -220,32 +220,36 @@ return {
       })
 
       lsp.ensure_installed({
-        "lua_ls",
-        "ts_ls",
+        -- lsps
+        "bashls",
+        "dockerls",
+        "docker_compose_language_service",
         "eslint",
+        "jsonls",
+        "lua_ls",
         "rust_analyzer",
+        "taplo",
+        "ts_ls",
+        "yamlls",
+      })
 
-        -- ◍ bash-language-server bashls
-        -- ◍ docker-compose-language-service docker_compose_language_service
-        -- ◍ eslint-lsp eslint
-        -- ◍ json-lsp jsonls
-        -- ◍ lua-language-server lua_ls
-        -- ◍ rust-analyzer rust_analyzer
-        -- ◍ stylua
-        -- ◍ taplo
-        -- ◍ typescript-language-server ts_ls
-        -- ◍ yaml-language-server yamlls
+      klsp.ensure_installed({
+        -- formatters
+        "prettier",
+        "prettierd",
+        "shellcheck",
+        "stylua",
       })
 
       local global_on_attach = function(c, b)
         -- require('lsp_mappings').on_attach(c, b)
-        require("kmobic33.lsp").on_attach(c, b)
+        klsp.on_attach(c, b)
         -- require("inlay-hints").on_attach(c, b)
       end
 
       lsp.on_attach(global_on_attach)
 
-      local capabilities = require("kmobic33.lsp").get_capabilities()
+      local capabilities = klsp.get_capabilities()
 
       local lspconfig = require("lspconfig")
 
