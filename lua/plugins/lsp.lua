@@ -1,10 +1,4 @@
 return {
-  -- {
-  --   "folke/neodev.nvim",
-  --   lazy = true,
-  --   -- event = { "BufReadPre *.lua" },
-  -- },
-
   { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
   { -- optional completion source for require statements and module annotations
     "hrsh7th/nvim-cmp",
@@ -221,12 +215,14 @@ return {
 
       lsp.ensure_installed({
         -- lsps
+        "cssmodules_ls",
         "bashls",
         "dockerls",
         "docker_compose_language_service",
         "eslint",
         "jsonls",
         "lua_ls",
+        "pyright",
         "rust_analyzer",
         "taplo",
         "ts_ls",
@@ -241,46 +237,16 @@ return {
         "stylua",
       })
 
+      local on_attach = require("kmobic33.lsp.on_attach")
+
       local global_on_attach = function(c, b)
         -- require('lsp_mappings').on_attach(c, b)
-        klsp.on_attach(c, b)
-        -- require("inlay-hints").on_attach(c, b)
+        on_attach.on_attach(c, b)
       end
 
       lsp.on_attach(global_on_attach)
 
-      local capabilities = klsp.get_capabilities()
-
-      local lspconfig = require("lspconfig")
-
-      lspconfig.csharp_ls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-      })
-
-      lspconfig.docker_compose_language_service.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-      })
-
-      lspconfig.dockerls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-      })
-
-      lspconfig.yamlls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-        settings = {
-          yaml = {
-            schemas = {
-              kubernetes = "/*.yaml",
-              -- Add the schema for gitlab piplines
-              -- ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = "*.gitlab-ci.yml",
-            },
-          },
-        },
-      })
+      klsp.setup_lsps()
 
       -- TODO - doesn't seem to work outside of nightly - moliva - 2024/04/04
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -290,147 +256,6 @@ return {
         -- title = "hover"
         silent = true,
       })
-
-      lspconfig.solidity.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-        cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
-        filetypes = { "solidity" },
-        root_dir = lspconfig.util.root_pattern(".prettierrc"),
-        single_file_support = true,
-      })
-
-      -- lspconfig.lemminx.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- })
-
-      -- lspconfig.jdtls.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- })
-
-      local lua_rtp = vim.split(package.path, ";")
-      table.insert(lua_rtp, "lua/?.lua")
-      table.insert(lua_rtp, "lua/?/init.lua")
-
-      -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-        settings = {
-          Lua = {
-            runtime = {
-              version = "LuaJIT",
-              path = lua_rtp,
-            },
-            diagnostics = {
-              -- Get the language server to recognize the `vim` and other globals
-              globals = { "vim", "describe", "it", "before_each", "after_each", "packer_plugins" },
-            },
-            -- completion = { callSnippet = "Both" },
-            completion = { callSnippet = "Replace" },
-            telemetry = { enable = false },
-            workspace = {
-              -- checkThirdParty = false,
-              -- Make the server aware of Neovim runtime files
-              -- library = vim.api.nvim_get_runtime_file("lua", true),
-              library = {
-                unpack(vim.api.nvim_get_runtime_file("", true)),
-                -- unpack(vim.api.nvim_get_runtime_file("lua", true)),
-                "${3rd}/luv/library",
-                "${3rd}/busted/library",
-              },
-            },
-            hint = {
-              enable = true,
-            },
-          },
-        },
-      })
-
-      lspconfig.bashls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-        filetypes = { "sh", "bash", "zsh" },
-      })
-
-      -- local home = os.getenv("HOME")
-
-      -- lspconfig.cssmodules_ls.setup({
-      --
-      --   cmd = { "node", home .. "/repos/cssmodules-language-server/lib/cli.js" },
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      --   -- on_attach = function(client, buf)
-      --   --   client.server_capabilities.definitionProvider = false
-      --   --   on_attach(client, buf)
-      --   -- end,
-      --   init_options = {
-      --     camelCase = false,
-      --   },
-      -- })
-
-      lspconfig.ts_ls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-        -- need to install previously:
-        cmd = { "typescript-language-server", "--stdio" },
-        -- disable_formatting = true,
-        settings = {
-          javascript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-            },
-          },
-          typescript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-            },
-          },
-        },
-      })
-
-      lspconfig.cssls.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-      })
-
-      lspconfig.html.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-      })
-
-      lspconfig.pyright.setup({
-        capabilities = capabilities,
-        -- on_attach = on_attach,
-      })
-
-      lspconfig.jsonls.setup({
-        capabilities = capabilities,
-        init_options = {
-          provideFormatter = true,
-        },
-        settings = {
-          json = {
-            format = "enable",
-          },
-        },
-      })
-
-      lspconfig.taplo.setup({})
 
       lsp.skip_server_setup({ "rust_analyzer" })
 
@@ -496,29 +321,4 @@ return {
       require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/kmobic33/snippets" })
     end,
   },
-
-  -- java
-  -- enabling this plugin fs up all other lsps
-  -- {
-  --   "nvim-java/nvim-java",
-  --   dependencies = {
-  --     "nvim-java/lua-async-await",
-  --     "nvim-java/nvim-java-refactor",
-  --     "nvim-java/nvim-java-core",
-  --     "nvim-java/nvim-java-test",
-  --     "nvim-java/nvim-java-dap",
-  --     "MunifTanjim/nui.nvim",
-  --     "neovim/nvim-lspconfig",
-  --     "mfussenegger/nvim-dap",
-  --     {
-  --       "williamboman/mason.nvim",
-  --       opts = {
-  --         registries = {
-  --           "github:nvim-java/mason-registry",
-  --           "github:mason-org/mason-registry",
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
 }
