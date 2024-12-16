@@ -258,7 +258,8 @@ function M.on_attach(_client, bufnr)
     {
       "<leader>vrn",
       function()
-        require("renamer").rename()
+        vim.lsp.buf.rename()
+        -- require("renamer").rename()
       end,
       desc = "Rename",
       unpack(opts),

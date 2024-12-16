@@ -35,7 +35,7 @@ return {
   ),
   parse(
     "todo",
-    "$LINE_COMMENT ${1|TODO,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"
+    "$LINE_COMMENT ${1|TODO,NOTE,FIXME,XXX|} - ${2:description} - moliva - $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE"
   ),
   parse(
     "btodo",
