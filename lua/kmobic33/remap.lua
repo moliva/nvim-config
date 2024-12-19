@@ -29,6 +29,8 @@ vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste over without replacing 
 vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete into an anonymous buffer" })
 vim.keymap.set("n", "<leader>D", '"_D', { desc = "Delete into an anonymous buffer" })
 
+vim.keymap.set({ "n", "v" }, "<leader>c", '"_c', { desc = "Change into an anonymous buffer" })
+
 -- yank to the system clipboard!
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>Y", '"+Y')
@@ -176,3 +178,6 @@ vim.keymap.set(
   "<cmd>LspRestart<cr><cmd>lua vim.print('LSPs restarted')<cr>",
   { desc = "Restart LSPs" }
 )
+
+-- escape terminal mode
+vim.keymap.set("t", "<esc><esc>", "<C-\\><C-n>")
