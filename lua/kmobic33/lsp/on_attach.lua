@@ -13,24 +13,27 @@ function M.on_attach(_client, bufnr)
   -- we almost always call on_attach multiple times (as copilot is enabled for every ft)
   cache[bufnr] = true
 
-  local opts = { buffer = bufnr, remap = false }
-  -- local opts = { buffer = true, remap = false }
+  local wk = require("which-key")
+  local u = require("kmobic33.lsp.utils")
 
-  local function k(keymap)
-    return vim.tbl_extend("force", keymap, opts)
+  local opts = { buffer = bufnr, remap = false }
+
+  ---Extends a table table with the opts provided
+  ---@param original table The original table (keymap for which-key or opts for keymap set)
+  ---@return table table with merged values
+  local function k(original)
+    return vim.tbl_extend("force", original, opts)
   end
 
-  local wk = require("which-key")
-
   -- symbols
-  vim.keymap.set("n", "<leader>o", "<cmd>SymbolsOutline<CR>", { desc = "Open symbols outline", unpack(opts) })
+  vim.keymap.set("n", "<leader>o", "<cmd>SymbolsOutline<CR>", k({ desc = "Open symbols outline" }))
 
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, opts)
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, k({ desc = "Hover over symbol" }))
+  vim.keymap.set("n", "<C-h>", vim.lsp.buf.signature_help, k({ desc = "Signature help" }))
 
   -- show next/prev error in file
-  vim.keymap.set("n", "<a-.>", vim.diagnostic.goto_next, opts)
-  vim.keymap.set("n", "<a-,>", vim.diagnostic.goto_prev, opts)
+  vim.keymap.set("n", "<a-.>", vim.diagnostic.goto_next, k({ desc = "Go to next diagnostic" }))
+  vim.keymap.set("n", "<a-,>", vim.diagnostic.goto_prev, k({ desc = "Go to previous diagnostic" }))
   -- vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
   -- vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
 
@@ -45,8 +48,6 @@ function M.on_attach(_client, bufnr)
   vim.keymap.set("n", "<leader>wl", function()
     vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, k({ desc = "List current workspace folders" }))
-
-  local u = require("kmobic33.lsp.utils")
 
   wk.add({
     -- lsp workspace
@@ -70,7 +71,7 @@ function M.on_attach(_client, bufnr)
     k({ "vc", u.visual_select_context, desc = "Visually select the current context" }),
 
     -- delete function calls
-    k({ "dc", u.delete_call, desc = "Delete function call", buffer = bufnr }),
+    k({ "dc", u.delete_call, desc = "Delete function call" }),
     k({ "dsc", u.delete_surrounding_call, desc = "Delete surrounding function call" }),
 
     -- go to

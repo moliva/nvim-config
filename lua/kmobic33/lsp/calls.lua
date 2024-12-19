@@ -20,6 +20,11 @@ return {
   (new_expression arguments: _ @arguments)
 ]
         ]],
+      generic_type = [[
+[
+  (generic_type type_arguments: (_) @arguments )
+]
+]],
     },
   },
   rust = {

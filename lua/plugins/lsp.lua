@@ -230,10 +230,11 @@ return {
       })
 
       klsp.ensure_installed({
-        -- formatters
+        -- formatters + linters
         "prettier",
         "prettierd",
         "shellcheck",
+        "shfmt",
         "stylua",
       })
 
